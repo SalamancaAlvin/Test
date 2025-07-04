@@ -2,219 +2,216 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tienda de Apps</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #121212;
-      color: #f5f5f5;
-      margin: 0;
-      padding-top: 60px;
-    }
-
-    header {
-      background: #1e1e1e;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
-      padding: 10px 20px;
-      box-shadow: 0 0 5px #000;
-    }
-
-    .menu {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .menu button {
-      background: #333;
-      color: #fff;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .menu button:hover {
-      background: #03DAC5;
-      color: #000;
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    #search {
-      width: 90%;
-      max-width: 600px;
-      margin: 20px auto;
-      display: block;
-      padding: 10px;
-      font-size: 16px;
-      background: #1e1e1e;color: #fff;
-      border: 1px solid #333;
-    }
-
-    .section {
-      margin-top: 40px;
-      padding: 0 20px;
-    }
-
-    .section h2 {
-      margin-bottom: 15px;
-      border-bottom: 1px solid #333;
-      padding-bottom: 5px;
-    }
-
-    .app-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-    }
-
-    .app {
-      background: #1e1e1e;
-      border-radius: 10px;
-      padding: 15px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.4);
-      text-align: center;
-    }
-
-    .app img {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 10px;
-    }
-
-    .app h3 {
-      margin: 5px 0;
-    }
-
-    .app p {
-      font-size: 13px;
-      color: #ccc;
-      margin-bottom: 8px;
-    }
-
-    .stars {
-      color: gold;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    .download-btn {
-      display: inline-block;
-      background: #03DAC5;
-      color: #000;
-      padding: 8px 14px;
-      border-radius: 20px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    .download-btn:hover {
-      background: #00bfa6;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Descarga Apps y Juegos</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #222; color: #eee; margin:0; padding:20px; }
+  .container { max-width: 900px; margin: auto; }
+  .card { background: #333; border-radius: 10px; padding: 15px; margin-bottom: 20px; }
+  .card img { width: 100%; max-height: 200px; object-fit: cover; border-radius: 10px; }
+  .card h3 { margin: 10px 0 5px; }
+  .download-btn { display: inline-block; margin-top: 10px; padding: 10px 15px; background: #ff4081; color: #fff; text-decoration: none; border-radius: 5px; }
+  .download-btn:hover { background: #e73370; }
+</style>
 </head>
 <body>
+  <div class="container">
+    <h1>Apps y Juegos para Descargar</h1>
 
-  <header>
-    <div class="menu"><button onclick="scrollToSection('accion')">🔥 Acción</button>
-      <button onclick="scrollToSection('herramientas')">🧰 Herramientas</button>
-      <button onclick="scrollToSection('estrategia')">♟️ Estrategia</button>
+    <div class="card">
+      <img src="img/juego1.jpg" alt="Juego Fantasía" />
+      <h3>Juego Fantasía</h3>
+      <p>Explora mundos mágicos y desafíos épicos.</p><a class="download-btn" href="app.html?id=app1">Ver detalles</a>
     </div>
-  </header>
 
-  <h1>🕹️ Tienda de Apps & Juegos</h1>
-  <input type="text" id="search" placeholder="Buscar app o juego...">
-
-  <div class="section" id="accion">
-    <h2>🔥 Acción</h2>
-    <div class="app-grid">
-      <div class="app">
-        <img src="https://via.placeholder.com/100x100?text=Shooter" alt="">
-        <h3>Shooter Legend</h3>
-        <div class="stars">★★★★☆</div>
-        <p>Dispara, esquiva y conquista la zona de guerra.</p>
-        <a class="download-btn" href="#">Descargar</a>
-      </div>
-      <div class="app">
-        <img src="https://via.placeholder.com/100x100?text=Zombie" alt="">
-        <h3>Zombie Rush</h3>
-        <div class="stars">★★★☆☆</div>
-        <p>Sobrevive oleadas infinitas de zombis sedientos.</p>
-        <a class="download-btn" href="#">Descargar</a>
-      </div>
+    <div class="card">
+      <img src="img/juego2.jpg" alt="App Utilitaria" />
+      <h3>App Utilitaria</h3>
+      <p>Herramientas para mejorar tu productividad diaria.</p>
+      <a class="download-btn" href="app.html?id=app2">Ver detalles</a>
     </div>
-  </div>
 
-  <div class="section" id="herramientas">
-    <h2>🧰 Herramientas</h2>
-    <div class="app-grid">
-      <div class="app">
-        <img src="https://via.placeholder.com/100x100?text=Cleaner" alt="">
-        <h3>File Cleaner</h3><div class="stars">★★★★☆</div>
-        <p>Libera espacio con este limpiador inteligente.</p>
-        <a class="download-btn" href="#">Descargar</a>
-      </div>
-      <div class="app">
-        <img src="https://via.placeholder.com/100x100?text=VPN" alt="">
-        <h3>Smart VPN</h3>
-        <div class="stars">★★★★★</div>
-        <p>Navega seguro con servidores rápidos y privados.</p>
-        <a class="download-btn" href="#">Descargar</a>
-      </div>
+    <div class="card">
+      <img src="img/juego3.jpg" alt="Juego de Aventura" />
+      <h3>Juego de Aventura</h3>
+      <p>Sumérgete en una historia llena de acción y misterio.</p>
+      <a class="download-btn" href="app.html?id=app3">Ver detalles</a>
+    </div>
+
+    <div class="card">
+      <img src="img/juego4.jpg" alt="App Creativa" />
+      <h3>App Creativa</h3>
+      <p>Inspírate y crea con herramientas innovadoras.</p>
+      <a class="download-btn" href="app.html?id=app4">Ver detalles</a>
     </div>
   </div>
-
-  <div class="section" id="estrategia">
-    <h2>♟️ Estrategia</h2>
-    <div class="app-grid">
-      <div class="app">
-        <img src="https://via.placeholder.com/100x100?text=Kingdom" alt="">
-        <h3>Kingdom Clash</h3>
-        <div class="stars">★★★★☆</div>
-        <p>Construye tu imperio y conquista reinos rivales.</p>
-        <a class="download-btn" href="#">Descargar</a>
-      </div>
-      <div class="app">
-        <img src="https://via.placeholder.com/100x100?text=Mini" alt="">
-        <h3>Mini Tácticas</h3>
-        <div class="stars">★★★☆☆</div>
-        <p>Estrategia por turnos en mundos pixelados.</p>
-        <a class="download-btn" href="#">Descargar</a>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const search = document.getElementById('search');search.addEventListener('input', function () {
-      const query = this.value.toLowerCase();
-      document.querySelectorAll('.app').forEach(app => {
-        const visible = app.innerText.toLowerCase().includes(query);
-        app.style.display = visible ? 'block' : 'none';
-      });
-    });
-
-    function scrollToSection(id) {
-      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-    }
-  </script>
-
 </body>
 </html>
+```
 
+---
+
+2. `app.html`
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Detalle de la App</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #111; color: #eee; margin: 0; padding: 20px; }
+  .container { max-width: 900px; margin: auto; }
+  h1 { margin-bottom: 10px; }#desc { margin-bottom: 20px; font-size: 1.1em; }
+  .gallery { display: flex; gap: 10px; margin-bottom: 20px; }
+  .gallery img { width: 150px; height: 270px; object-fit: cover; border-radius: 8px; }
+  .download-btn {
+    display: inline-block; padding: 12px 20px; background: #ff4081; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold;
+  }
+  .download-btn:hover { background: #e73370; }
+  .rating-section { margin-top: 30px; }
+  .rating-section h2 { margin-bottom: 10px; }
+  #comments { margin-top: 20px; }
+  #comments div { background: #222; padding: 10px; border-radius: 6px; margin-bottom: 10px; }
+  textarea, input[type="number"] {
+    width: 100%; margin-top: 8px; padding: 8px; border-radius: 5px; border: none; font-size: 1em;
+  }
+  button { margin-top: 10px; padding: 10px 15px; background: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer; }
+  button:hover { background: #45a049; }
+</style>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1 id="title">Cargando...</h1>
+    <p id="desc"></p>
+    <div class="gallery" id="gallery"></div><a id="download-btn" class="download-btn" href="#" target="_blank">Descargar</a>
+
+    <div class="rating-section">
+      <h2>Califica esta app</h2>
+      <label for="rating">Puntuación (1-5):</label>
+      <input type="number" id="rating" min="1" max="5" />
+      <label for="comment">Comentario:</label>
+      <textarea id="comment" rows="3" placeholder="Escribe tu comentario aquí..."></textarea>
+      <button onclick="sendFeedback()">Enviar</button>
+      <div id="comments"></div>
+    </div>
+  </div>
+
+<script>
+  // Configuración Firebase - REEMPLAZA con la tuya
+  const firebaseConfig = {
+    apiKey: "TU_APIKEY",
+    authDomain: "TU_AUTHDOMAIN",
+    databaseURL: "TU_DATABASEURL",
+    projectId: "TU_PROJECTID",
+    storageBucket: "TU_STORAGEBUCKET",
+    messagingSenderId: "TU_MESSAGINGSENDERID",
+    appId: "TU_APPID"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  // Datos de ejemplo, reemplaza o extiende aquí
+  const apps = {
+    app1: {
+      title: "Juego Fantasía",
+      description: "Explora mundos mágicos y desafíos épicos.",
+      images: ["img/juego1.jpg", "img/juego1b.jpg"],
+      downloadLink: "#"
+    },
+    app2: {
+      title: "App Utilitaria",
+      description: "Herramientas para mejorar tu productividad diaria.",images: ["img/juego2.jpg"],
+      downloadLink: "#"
+    },
+    app3: {
+      title: "Juego de Aventura",
+      description: "Sumérgete en una historia llena de acción y misterio.",
+      images: ["img/juego3.jpg"],
+      downloadLink: "#"
+    },
+    app4: {
+      title: "App Creativa",
+      description: "Inspírate y crea con herramientas innovadoras.",
+      images: ["img/juego4.jpg"],
+      downloadLink: "#"
+    }
+  };
+
+  // Obtener id de la URL
+  const params = new URLSearchParams(window.location.search);
+  const appId = params.get('id');
+
+  // Referencias DOM
+  const titleEl = document.getElementById('title');
+  const descEl = document.getElementById('desc');
+  const galleryEl = document.getElementById('gallery');
+  const downloadBtn = document.getElementById('download-btn');
+  const commentsEl = document.getElementById('comments');
+  const ratingInput = document.getElementById('rating');
+  const commentInput = document.getElementById('comment');
+
+  if (!appId || !apps[appId]) {
+    titleEl.textContent = "App no encontrada";
+    descEl.textContent = "";
+  } else {
+    const app = apps[appId];
+    titleEl.textContent = app.title;
+    descEl.textContent = app.description;
+    downloadBtn.href = app.downloadLink;
+
+    // Mostrar imágenes
+    galleryEl.innerHTML = "";app.images.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      galleryEl.appendChild(img);
+    });
+
+    // Cargar comentarios de Firebase
+    loadComments();
+  }
+
+  function loadComments() {
+    commentsEl.innerHTML = '<p>Cargando comentarios...</p>';
+    db.ref('apps/' + appId + '/comments').on('value', snapshot => {
+      commentsEl.innerHTML = '';
+      const data = snapshot.val();
+      if (!data) {
+        commentsEl.innerHTML = '<p>No hay comentarios aún.</p>';
+        return;
+      }
+      for (const key in data) {
+        const c = data[key];
+        const div = document.createElement('div');
+        div.textContent = `⭐ c.rating -{c.text}`;
+        commentsEl.appendChild(div);
+      }
+    });
+  }
+
+  function sendFeedback() {
+    const rating = parseInt(ratingInput.value);
+    const text = commentInput.value.trim();
+    if (!rating || rating < 1 || rating > 5) {
+      alert('Por favor ingresa una puntuación válida (1-5).');
+      return;
+    }
+    if (!text) {
+      alert('Por favor escribe un comentario.');
+      return;
+    }
+    const newCommentRef = db.ref('apps/' + appId + '/comments').push();
+    newCommentRef.set({ rating, text })
+      .then(() => {
+        ratingInput.value = '';
+        commentInput.value = '';})
+      .catch(err => alert('Error al enviar comentario: ' + err));
+  }
+</script>
+</body>
+</html>
