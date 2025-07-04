@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tienda de Apps</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #121212;
+      color: #f5f5f5;
+      margin: 0;
+      padding-top: 60px;
+    }
+
+    header {
+      background: #1e1e1e;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 10px 20px;
+      box-shadow: 0 0 5px #000;
+    }
+
+    .menu {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .menu button {
+      background: #333;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .menu button:hover {
+      background: #03DAC5;
+      color: #000;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    #search {
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto;
+      display: block;
+      padding: 10px;
+      font-size: 16px;
+      background: #1e1e1e;color: #fff;
+      border: 1px solid #333;
+    }
+
+    .section {
+      margin-top: 40px;
+      padding: 0 20px;
+    }
+
+    .section h2 {
+      margin-bottom: 15px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 5px;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .app {
+      background: #1e1e1e;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      text-align: center;
+    }
+
+    .app img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .app h3 {
+      margin: 5px 0;
+    }
+
+    .app p {
+      font-size: 13px;
+      color: #ccc;
+      margin-bottom: 8px;
+    }
+
+    .stars {
+      color: gold;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .download-btn {
+      display: inline-block;
+      background: #03DAC5;
+      color: #000;
+      padding: 8px 14px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .download-btn:hover {
+      background: #00bfa6;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="menu"><button onclick="scrollToSection('accion')">🔥 Acción</button>
+      <button onclick="scrollToSection('herramientas')">🧰 Herramientas</button>
+      <button onclick="scrollToSection('estrategia')">♟️ Estrategia</button>
+    </div>
+  </header>
+
+  <h1>🕹️ Tienda de Apps & Juegos</h1>
+  <input type="text" id="search" placeholder="Buscar app o juego...">
+
+  <div class="section" id="accion">
+    <h2>🔥 Acción</h2>
+    <div class="app-grid">
+      <div class="app">
+        <img src="https://via.placeholder.com/100x100?text=Shooter" alt="">
+        <h3>Shooter Legend</h3>
+        <div class="stars">★★★★☆</div>
+        <p>Dispara, esquiva y conquista la zona de guerra.</p>
+        <a class="download-btn" href="#">Descargar</a>
+      </div>
+      <div class="app">
+        <img src="https://via.placeholder.com/100x100?text=Zombie" alt="">
+        <h3>Zombie Rush</h3>
+        <div class="stars">★★★☆☆</div>
+        <p>Sobrevive oleadas infinitas de zombis sedientos.</p>
+        <a class="download-btn" href="#">Descargar</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="herramientas">
+    <h2>🧰 Herramientas</h2>
+    <div class="app-grid">
+      <div class="app">
+        <img src="https://via.placeholder.com/100x100?text=Cleaner" alt="">
+        <h3>File Cleaner</h3><div class="stars">★★★★☆</div>
+        <p>Libera espacio con este limpiador inteligente.</p>
+        <a class="download-btn" href="#">Descargar</a>
+      </div>
+      <div class="app">
+        <img src="https://via.placeholder.com/100x100?text=VPN" alt="">
+        <h3>Smart VPN</h3>
+        <div class="stars">★★★★★</div>
+        <p>Navega seguro con servidores rápidos y privados.</p>
+        <a class="download-btn" href="#">Descargar</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="estrategia">
+    <h2>♟️ Estrategia</h2>
+    <div class="app-grid">
+      <div class="app">
+        <img src="https://via.placeholder.com/100x100?text=Kingdom" alt="">
+        <h3>Kingdom Clash</h3>
+        <div class="stars">★★★★☆</div>
+        <p>Construye tu imperio y conquista reinos rivales.</p>
+        <a class="download-btn" href="#">Descargar</a>
+      </div>
+      <div class="app">
+        <img src="https://via.placeholder.com/100x100?text=Mini" alt="">
+        <h3>Mini Tácticas</h3>
+        <div class="stars">★★★☆☆</div>
+        <p>Estrategia por turnos en mundos pixelados.</p>
+        <a class="download-btn" href="#">Descargar</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const search = document.getElementById('search');search.addEventListener('input', function () {
+      const query = this.value.toLowerCase();
+      document.querySelectorAll('.app').forEach(app => {
+        const visible = app.innerText.toLowerCase().includes(query);
+        app.style.display = visible ? 'block' : 'none';
+      });
+    });
+
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+
+</body>
+</html>
+
