@@ -10,6 +10,7 @@
       --neon: #00ffff;
       --dark-bg: #020611;
       --dark-card-bg: rgba(0, 0, 0, 0.6);
+      --accent: linear-gradient(90deg, #00ffff, #8a2be2);
     }
     body {
       background-color: var(--dark-bg);
@@ -22,45 +23,77 @@
     }
     .card {
       background-color: var(--dark-card-bg);
-      border: 1px solid var(--neon);
+      border: 1px solid rgba(0,255,255,0.2);
       color: var(--neon);
       text-align: center;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.25);
+      border-radius: 12px;
+      transition: transform 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
     }
     .btn-logout {
-      color: #ff4444;
+      background: transparent;
       border: 1px solid #ff4444;
+      color: #ff4444;
+      transition: all 0.3s ease;
+    }
+    .btn-logout:hover {
+      background: #ff4444;
+      color: #fff;
+    }
+    .welcome-box {
+      background: rgba(0,255,255,0.05);
+      border: 1px solid rgba(0,255,255,0.15);
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,255,255,0.1);
+      margin-bottom: 2rem;
     }
   </style>
 </head>
 <body>
   <nav class="navbar navbar-dark">
-    <div class="container d-flex justify-content-between">
-      <a href="#" class="navbar-brand fw-bold">TechFix</a>
+    <div class="container d-flex justify-content-between align-items-center">
+      <a href="index.html" class="navbar-brand fw-bold" style="color:var(--neon);">TechFix</a>
       <button class="btn btn-logout" onclick="logout()">Logout</button>
     </div>
   </nav>
 
   <section class="container py-5">
-    <h2 id="welcome" class="text-center mb-4"></h2>
+    <div class="welcome-box">
+      <h2 id="welcome" class="mb-1"></h2>
+      <p id="method" class="small"></p>
+    </div>
     <div class="row g-4 text-center">
-      <div class="col-md-4"><div class="card p-4"><h4>0</h4><p>Total Users</p></div></div>
-      <div class="col-md-4"><div class="card p-4"><h4>0</h4><p>Total Groups</p></div></div>
-      <div class="col-md-4"><div class="card p-4"><h4>0</h4><p>Total Chats</p></div></div>
+      <div class="col-md-4"><div class="card p-4"><h4>12</h4><p>Total Users</p></div></div>
+      <div class="col-md-4"><div class="card p-4"><h4>7</h4><p>Total Groups</p></div></div>
+      <div class="col-md-4"><div class="card p-4"><h4>45</h4><p>Total Chats</p></div></div>
     </div>
   </section>
 
   <script>
+  // Recuperar usuario y método desde localStorage
   const user = localStorage.getItem('techfixUser');
+  const method = localStorage.getItem('techfixMethod');
   const welcome = document.getElementById('welcome');
+  const methodText = document.getElementById('method');
+
   if(user) {
     welcome.textContent = `Welcome, ${user}!`;
+    methodText.textContent = `Connected via ${method ? method.toUpperCase() : 'UNKNOWN'}`;
   } else {
+    // Si no hay sesión, redirigir al login
     window.location.href = 'connect.html';
   }
 
+  // Función para cerrar sesión
   function logout() {
     localStorage.removeItem('techfixUser');
+    localStorage.removeItem('techfixMethod');
     window.location.href = 'index.html';
   }
   </script>
