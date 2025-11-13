@@ -109,39 +109,63 @@ a{color:var(--neon);text-decoration:none}
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+<!-- 🔥 Script actualizado -->
 <script>
-function showSpinner(v){document.getElementById('spinner').style.display=v?'flex':'none';}
-function showSuccess(user,method){
-  const modal=document.getElementById('successModal');
-  document.getElementById('successText').textContent=`Welcome ${user}! Connected via ${method.toUpperCase()}. Redirecting...`;
-  modal.style.display='flex';
-  setTimeout(()=>{modal.style.display='none';window.location='index.html';},1600);
+function showSpinner(v){
+  document.getElementById('spinner').style.display = v ? 'flex' : 'none';
+}
+
+function showSuccess(user, method){
+  const modal = document.getElementById('successModal');
+  document.getElementById('successText').textContent =
+    `Welcome ${user}! Connected via ${method.toUpperCase()}. Redirecting...`;
+  modal.style.display = 'flex';
+  setTimeout(()=>{
+    modal.style.display = 'none';
+    window.location.href = 'dashboard.html'; // ✅ redirige correctamente
+  },1600);
 }
 
 function connect(method){
-  let user='';
-  if(method==='password') user=document.getElementById('userPw').value.trim();
-  if(method==='token') user=document.getElementById('deviceName').value.trim()||'token_user';
-  if(method==='qr') user=document.getElementById('userQr').value.trim()||'qr_user';
-  if(!user){alert('Please enter a username.');return;}
-  localStorage.setItem('techfixUser',user);
-  localStorage.setItem('techfixMethod',method);
+  let user = '';
+  if(method === 'password') user = document.getElementById('userPw').value.trim();
+  if(method === 'token') user = document.getElementById('deviceName').value.trim() || 'token_user';
+  if(method === 'qr') user = document.getElementById('userQr').value.trim() || 'qr_user';
+
+  if(!user){
+    alert('Please enter a username.');
+    return;
+  }
+
+  localStorage.setItem('techfixUser', user);
+  localStorage.setItem('techfixMethod', method);
+
   showSpinner(true);
-  setTimeout(()=>{showSpinner(false);showSuccess(user,method);},1200);
+  setTimeout(()=>{
+    showSpinner(false);
+    showSuccess(user, method);
+  },1200);
 }
 
 // --- QR generation ---
 let qr;
 function generateQR(){
-  const sessionId='session-'+Date.now();
-  const link=`https://techfix.app/connect?session=${sessionId}`;
-  const qrBox=document.getElementById('qrcode');
-  qrBox.innerHTML='';
-  qr=new QRCode(qrBox,{text:link,width:220,height:220,colorDark:"#00ffff",colorLight:"#000",correctLevel:QRCode.CorrectLevel.H});
-  const qrText=document.getElementById('qrLinkText');
-  qrText.innerHTML=`<a href="${link}" target="_blank">${link}</a>`;
+  const sessionId = 'session-' + Date.now();
+  const link = `https://techfix.app/connect?session=${sessionId}`;
+  const qrBox = document.getElementById('qrcode');
+  qrBox.innerHTML = '';
+  qr = new QRCode(qrBox, {
+    text: link,
+    width: 220,
+    height: 220,
+    colorDark: "#00ffff",
+    colorLight: "#000",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+  const qrText = document.getElementById('qrLinkText');
+  qrText.innerHTML = `<a href="${link}" target="_blank">${link}</a>`;
 }
 generateQR();
 </script>
 </body>
-            </html>
+                               </html>
