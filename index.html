@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>Suika Game Ultimate - GitHub Edition</title>
+    <title>Suika Game Ultimate</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
     <style>
         body { margin: 0; background: #1a1a1a; overflow: hidden; font-family: 'Arial Rounded MT Bold', sans-serif; }
@@ -129,8 +129,8 @@ function processResource(source) {
     const sc = window.game.scene.scenes[0];
     const key = `res_${Date.now()}`;
     status.innerText = "CARGANDO...";
-    if (editState.tipo === 'musica' || editState.tipo === 'pop') sc.load.audio(key, source, { crossOrigin: 'anonymous' });
-    else sc.load.image(key, source, { crossOrigin: 'anonymous' });
+    if (editState.tipo === 'musica' || editState.tipo === 'pop') sc.load.audio(key, source);
+    else sc.load.image(key, source);
     sc.load.once('complete', () => {
         if(editState.tipo === 'fruta') FRUTAS[editState.idx].skin = key;
         else if(editState.tipo === 'fondo') globalConfig.fondo = key;
@@ -146,27 +146,20 @@ class EscenaMenu extends Phaser.Scene {
     constructor() { super('EscenaMenu'); }
 
     preload() {
-        // PRECARGA DE ASSETS DESDE CARPETA GITHUB
+        // RUTA CORREGIDA PARA TU CARPETA ASSETS
         this.load.audio('musica_default', 'assets/musica.mp3');
         this.load.audio('pop_default', 'assets/pop.mp3');
         this.load.image('fondo_default', 'assets/fondo.jpg');
 
-        // Barra de carga estética
         const { width: w, height: h } = this.scale;
-        const progressBox = this.add.graphics();
         const progressBar = this.add.graphics();
-        progressBox.fillStyle(0x5d4037, 0.2);
-        progressBox.fillRoundedRect(w/2 - 110, h/2 - 15, 220, 30, 10);
-
         this.load.on('progress', (value) => {
             progressBar.clear();
             progressBar.fillStyle(0xff8a65, 1);
             progressBar.fillRoundedRect(w/2 - 105, h/2 - 10, 210 * value, 20, 8);
         });
-
         this.load.on('complete', () => {
             progressBar.destroy();
-            progressBox.destroy();
             if (this.textures.exists('fondo_default')) globalConfig.fondo = 'fondo_default';
         });
     }
@@ -177,6 +170,13 @@ class EscenaMenu extends Phaser.Scene {
         this.add.rectangle(w/2, h/2, w, h, 0xfffae5);
         this.add.circle(w/2, h, w, 0xffe0b2, 0.4);
         
+        // DESBLOQUEO DE AUDIO PARA MÓVILES
+        this.input.once('pointerdown', () => {
+            if (this.sound.context.state === 'suspended') {
+                this.sound.context.resume();
+            }
+        });
+
         this.add.text(w/2, 80, 'SUIKA', { fontSize: '80px', color: '#5d4037', fontStyle: 'bold' }).setOrigin(0.5);
         
         const userGroup = this.add.container(w/2, 160).setInteractive(new Phaser.Geom.Rectangle(-100,-20,200,40), Phaser.Geom.Rectangle.Contains);
@@ -194,7 +194,6 @@ class EscenaMenu extends Phaser.Scene {
             container.add([b, this.add.text(0, 0, txt, { fontSize: '18px', color: '#fff', fontStyle: 'bold' }).setOrigin(0.5)]);
             b.on('pointerdown', () => {
                 this.tweens.add({ targets: container, scale: 0.95, duration: 80, yoyo: true });
-                if (this.sound.context.state === 'suspended') this.sound.context.resume();
                 act();
             });
         };
@@ -241,10 +240,10 @@ class EscenaJuego extends Phaser.Scene {
     create() {
         const { width: w, height: h } = this.scale;
         this.puntos = 0; this.gameOver = false; this.frutasActivas = [];
+        
         if(globalConfig.fondo) this.add.image(w/2, h/2, globalConfig.fondo).setDisplaySize(w, h);
         else this.add.rectangle(w/2, h/2, w, h, 0xfffae5);
 
-        // UI SIGUIENTE FRUTA
         const nextBox = this.add.container(w - 70, 70);
         nextBox.add(this.add.circle(0, 0, 45, 0xffffff, 0.8).setStrokeStyle(4, 0x5d4037));
         nextBox.add(this.add.text(0, -55, 'SIGUIENTE', {fontSize:'12px', color:'#5d4037', fontStyle:'bold'}).setOrigin(0.5));
