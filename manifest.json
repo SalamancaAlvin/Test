@@ -1,0 +1,15 @@
+{
+  "name": "Imanota",
+  "short_name": "Imanota",
+  "description": "Tu pizarra de imanes — dibuja, escribe, graba y no lo olvides",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#B78A57",
+  "theme_color": "#2B2318",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
