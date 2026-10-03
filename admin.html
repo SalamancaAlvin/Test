@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="es" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Panel – Vidlo</title>
+<script>try{if(localStorage.getItem('vidlo-mode')==='light')document.documentElement.classList.remove('dark')}catch(e){}</script>
+<link rel="preconnect" href="https://api.fontshare.com" />
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+<style>
+:root{--body:#0b0b10;--card:#10111a;--line:#21232f;--slate:#23263a;--lead:#ededf2;--subs:#8d90a3;--main:#2bb8a0;--danger:#ff6b6b}
+html:not(.dark){--body:#f4f5f9;--card:#fff;--line:#e1e4ec;--slate:#e4e7f1;--lead:#14151c;--subs:#5f6377;--main:#13a58c;--danger:#d63b3b}
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:dark}html:not(.dark){color-scheme:light}
+body{font-family:"Satoshi",system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--body);color:var(--subs);line-height:1.5;min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--main);outline-offset:2px}
+[hidden]{display:none!important}
+.wrap{max-width:46rem;margin:0 auto;padding:1.25rem 1.4rem 3rem}
+.top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-bottom:1.25rem}
+.top h1{font-size:1.4rem;color:var(--lead);letter-spacing:-.01em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:.75rem;padding:1.25rem;display:grid;gap:1rem;margin-bottom:1.25rem}
+.card h2{font-size:1.15rem;color:var(--lead)}
+label{display:grid;gap:.35rem;font-size:.85rem;font-weight:500;color:var(--subs)}
+input,textarea{width:100%;min-height:2.75rem;padding:.6rem .9rem;border:1px solid var(--line);background:var(--body);border-radius:.625rem;color:var(--lead)}
+textarea{min-height:6.5rem;resize:vertical}
+input::placeholder,textarea::placeholder{color:var(--subs);opacity:.7}
+.grid2{display:grid;gap:1rem}
+@media(min-width:560px){.grid2{grid-template-columns:1fr 1fr}}
+small{font-size:.78rem;font-weight:400;color:var(--subs)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:0 1.25rem;border-radius:.625rem;font-weight:700;font-size:.95rem;cursor:pointer;border:0;background:var(--main);color:#fff}
+.btn:hover{filter:brightness(1.1)}
+.btn:disabled{opacity:.5;cursor:wait}
+.btn.ghost{background:var(--slate);color:var(--lead)}
+.btn.sm{min-height:2.25rem;padding:0 .9rem;font-size:.85rem}
+.btn.del{background:transparent;color:var(--danger);border:1px solid var(--line)}
+.msg{font-size:.9rem;font-weight:500;min-height:1.3rem}
+.msg.ok{color:var(--main)}.msg.err{color:var(--danger)}
+.list{display:grid;gap:.5rem}
+.row{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.7rem .9rem;border:1px solid var(--line);border-radius:.625rem}
+.row b{display:block;color:var(--lead);font-size:.95rem;line-height:1.3}
+.row span{font-size:.8rem}
+.row a{text-decoration:none}
+.empty{text-align:center;padding:1rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1>Panel de videos</h1>
+    <a class="btn ghost sm" href="index.html">Ver el sitio</a>
+  </div>
+
+  <form class="card" id="login">
+    <h2>Entrar</h2>
+    <label>Contraseña de administrador
+      <input type="password" id="pw" autocomplete="current-password" required />
+    </label>
+    <button class="btn" type="submit">Entrar</button>
+    <p class="msg err" id="loginMsg" role="alert"></p>
+  </form>
+
+  <div id="panel" hidden>
+    <form class="card" id="add">
+      <h2>Agregar video</h2>
+      <label>Enlace del video
+        <input type="url" id="link" placeholder="https://mega.nz/file/...#clave  o  https://youtu.be/..." />
+        <small>Acepta enlaces de Mega (con su clave) y de YouTube.</small>
+      </label>
+      <label>Título <input id="title" maxlength="200" required /></label>
+      <div class="grid2">
+        <label>Canal <input id="ch" maxlength="80" required /></label>
+        <label>Duración <input id="dur" maxlength="12" placeholder="12:34" /></label>
+      </div>
+      <div class="grid2">
+        <label>Categoría <input id="cat" maxlength="40" placeholder="Tutorial, Documental…" /></label>
+        <label>Año <input id="year" type="number" min="1900" max="2100" placeholder="2026" /></label>
+      </div>
+      <label>Etiquetas <input id="tags" placeholder="separadas por comas" /></label>
+      <label>Descripción <textarea id="desc" maxlength="2000"></textarea></label>
+      <label>Miniatura (opcional)
+        <input type="url" id="thumb" placeholder="https://…/imagen.jpg" />
+        <small>Si la dejas vacía se usa un degradado de color.</small>
+      </label>
+      <div class="grid2">
+        <label>Valoración (opcional) <input id="rating" maxlength="6" placeholder="8.7" /></label>
+        <label>Votos (opcional) <input id="votes" maxlength="20" placeholder="1,204" /></label>
+      </div>
+      <button class="btn" type="submit" id="addBtn">Publicar</button>
+      <p class="msg" id="addMsg" role="status"></p>
+    </form>
+
+    <section class="card">
+      <h2>Videos publicados</h2>
+      <div class="list" id="list"></div>
+    </section>
+
+    <button class="btn ghost sm" id="logout" type="button">Cerrar sesión</button>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const getPw = () => { try { return sessionStorage.getItem('vidlo-admin') || ''; } catch (e) { return ''; } };
+const setPw = v => { try { v ? sessionStorage.setItem('vidlo-admin', v) : sessionStorage.removeItem('vidlo-admin'); } catch (e) {} };
+
+async function api(path, opts = {}) {
+  const r = await fetch(path, { ...opts, headers: { 'Content-Type': 'application/json', 'x-admin-password': getPw() } });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(d.error || 'Algo salió mal');
+  return d;
+}
+const say = (el, text, kind) => { el.textContent = text; el.className = 'msg' + (kind ? ' ' + kind : ''); };
+
+function show(on) { $('login').hidden = on; $('panel').hidden = !on; }
+
+async function loadList() {
+  const vs = await (await fetch('/api/videos')).json();
+  $('list').innerHTML = vs.length ? vs.map(v => `
+    <div class="row">
+      <div><b>${esc(v.title)}</b><span>${esc(v.ch)}${v.src.length ? '' : ' · sin enlace de video'}</span></div>
+      <div style="display:flex;gap:.5rem">
+        <a class="btn ghost sm" href="watch.html?id=${v.id}">Ver</a>
+        <button class="btn del sm" data-id="${v.id}" data-t="${esc(v.title)}">Borrar</button>
+      </div>
+    </div>`).join('') : '<p class="empty">Todavía no hay videos.</p>';
+}
+
+$('login').addEventListener('submit', async e => {
+  e.preventDefault();
+  setPw($('pw').value);
+  try { await api('/api/admin/check'); say($('loginMsg'), ''); show(true); loadList(); }
+  catch (err) { setPw(''); say($('loginMsg'), err.message, 'err'); }
+});
+
+$('add').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = $('addBtn'); btn.disabled = true; say($('addMsg'), 'Publicando…');
+  try {
+    const body = {};
+    ['link', 'title', 'ch', 'dur', 'cat', 'year', 'tags', 'desc', 'thumb', 'rating', 'votes'].forEach(k => body[k] = $(k).value);
+    await api('/api/videos', { method: 'POST', body: JSON.stringify(body) });
+    $('add').reset(); say($('addMsg'), 'Video publicado', 'ok'); loadList();
+  } catch (err) { say($('addMsg'), err.message, 'err'); }
+  btn.disabled = false;
+});
+
+$('list').addEventListener('click', async e => {
+  const b = e.target.closest('.del'); if (!b) return;
+  if (!confirm(`¿Borrar "${b.dataset.t}"? No se puede deshacer.`)) return;
+  try { await api('/api/videos/' + b.dataset.id, { method: 'DELETE' }); loadList(); }
+  catch (err) { alert(err.message); }
+});
+
+$('logout').onclick = () => { setPw(''); show(false); $('pw').value = ''; };
+
+if (getPw()) api('/api/admin/check').then(() => { show(true); loadList(); }).catch(() => setPw(''));
+</script>
+</body>
+</html>

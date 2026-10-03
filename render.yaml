@@ -1,0 +1,21 @@
+databases:
+  - name: vidlo-db
+    plan: free
+    databaseName: vidlo
+    user: vidlo
+
+services:
+  - type: web
+    name: vidlo
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: vidlo-db
+          property: connectionString
+      - key: ADMIN_PASSWORD
+        sync: false
