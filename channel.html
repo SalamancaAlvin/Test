@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="es" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Canal – Vidlo</title>
+<script>try{if(localStorage.getItem('vidlo-mode')==='light')document.documentElement.classList.remove('dark')}catch(e){}</script>
+<link rel="preconnect" href="https://api.fontshare.com" />
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --body:#0b0b10;
+  --card:#12131c;
+  --card-soft:#181a26;
+  --line:#212435;
+  --slate:#25283d;
+  --lead:#ededf2;
+  --subs:#8d90a3;
+  --main:#2bb8a0;
+  --accent:#7c5cff;
+  --gold:#e3b53c;
+  --radius:.85rem;
+}
+html:not(.dark){
+  --body:#f4f5f9; --card:#ffffff; --card-soft:#edf0f7; --line:#e1e4ec; --slate:#e2e5f0;
+  --lead:#14151c; --subs:#5f6377; --main:#13a58c; --accent:#6242ea; --gold:#d19a12;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:dark} html:not(.dark){color-scheme:light}
+body{
+  font-family:"Satoshi",system-ui,-apple-system,sans-serif;
+  background:var(--body);color:var(--subs);line-height:1.5;min-height:100vh;
+  -webkit-font-smoothing:antialiased;padding-bottom:4rem;
+}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer}
+.wrap{width:100%;max-width:48rem;margin-inline:auto;padding-inline:1.2rem}
+.ic{width:1.25rem;height:1.25rem;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ic-fill{fill:currentColor;stroke:none}
+[hidden]{display:none!important}
+
+header.top{position:sticky;top:0;z-index:40;background:var(--body);border-bottom:1px solid var(--line)}
+.top-in{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-block:.9rem}
+.brand{display:flex;align-items:center;gap:.5rem;color:var(--lead);font-weight:700;font-size:1.3rem;letter-spacing:-.02em}
+.brand-mark{width:2rem;height:2rem;border-radius:.5rem;background:var(--accent);display:grid;place-items:center;color:#fff}
+.top-r{display:flex;align-items:center;gap:.5rem}
+.icon-btn{width:2.5rem;height:2.5rem;display:grid;place-items:center;border-radius:.625rem;color:var(--subs)}
+.icon-btn:hover{background:var(--card-soft);color:var(--lead)}
+
+.hero-card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:1.4rem;display:grid;gap:1rem;margin-top:1.2rem;
+}
+.hero-card h1{font-size:1.6rem;font-weight:700;color:var(--lead);line-height:1.2;letter-spacing:-.01em}
+.hero-card .subtitle{font-size:.9rem;color:var(--main);font-weight:500;margin-top:-.6rem}
+.meta-row{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .6rem;font-size:.85rem;color:var(--subs)}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{padding:.25rem .75rem;border-radius:999px;background:var(--card-soft);border:1px solid var(--line);font-size:.8rem;font-weight:500;color:var(--subs)}
+.desc{font-size:.9rem;color:var(--lead);opacity:.9;line-height:1.6}
+
+.add-btn{
+  width:100%;min-height:2.8rem;border-radius:.625rem;background:var(--slate);color:var(--lead);
+  font-weight:700;font-size:.9rem;display:flex;align-items:center;justify-content:space-between;padding:0 1rem;
+}
+.add-btn:hover{filter:brightness(1.1)}
+.action-row{display:flex;gap:.6rem;align-items:center}
+.btn-main{
+  flex:1;min-height:2.8rem;border-radius:.625rem;background:var(--lead);color:var(--body);
+  font-weight:700;font-size:.95rem;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+}
+.btn-main:hover{opacity:.9}
+.btn-sq{
+  width:2.8rem;height:2.8rem;border-radius:.625rem;border:1px solid var(--line);
+  background:var(--card-soft);color:var(--lead);display:grid;place-items:center;
+}
+.btn-sq:hover{border-color:var(--subs)}
+
+.rating-box{display:flex;align-items:center;gap:.75rem;padding-top:.4rem}
+.rating-box .ic{width:2rem;height:2rem;color:var(--gold)}
+.rating-val{font-size:1.8rem;font-weight:700;color:var(--lead);line-height:1}
+.rating-meta{display:grid;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--subs)}
+.rating-meta b{color:var(--lead);font-size:.8rem}
+
+.sec-title{font-size:1.3rem;font-weight:700;color:var(--lead);margin:1.8rem 0 .8rem}
+.rel-badge{display:inline-block;padding:.15rem .5rem;background:var(--card-soft);border-radius:.375rem;font-size:.75rem;font-weight:700;color:var(--subs);margin-bottom:.6rem}
+.rel-card{
+  display:flex;align-items:center;gap:.9rem;padding:.75rem;background:var(--card);
+  border:1px solid var(--line);border-radius:.75rem;
+}
+.rel-thumb{width:4.5rem;aspect-ratio:1;border-radius:.5rem;background-size:cover;background-position:center;flex:none}
+.rel-info h3{font-size:.95rem;font-weight:700;color:var(--lead)}
+.rel-info p{font-size:.8rem;color:var(--subs)}
+
+.eps-head{display:flex;align-items:center;justify-content:space-between;margin:2rem 0 1rem}
+.eps-head h2{font-size:1.3rem;font-weight:700;color:var(--lead)}
+.eps-ctrls{display:flex;gap:.5rem}
+
+.eps-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.9rem}
+@media (min-width:640px){ .eps-grid{grid-template-columns:repeat(3,1fr)} }
+
+.ep-card{position:relative;display:grid;gap:.4rem}
+.ep-thumb{position:relative;width:100%;aspect-ratio:16/9;border-radius:.625rem;overflow:hidden;background:#000}
+.ep-thumb .art{width:100%;height:100%;background-size:cover;background-position:center}
+.ep-badge{
+  position:absolute;left:.5rem;bottom:.5rem;padding:.2rem .6rem;background:rgba(18,19,28,.85);
+  backdrop-filter:blur(4px);border-radius:.375rem;font-size:.75rem;font-weight:700;color:var(--lead);
+}
+.ep-card h3{font-size:.85rem;font-weight:700;color:var(--lead);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+.toast{position:fixed;left:50%;bottom:2rem;transform:translate(-50%,1rem);z-index:60;background:var(--lead);color:var(--body);padding:.7rem 1.1rem;border-radius:.625rem;font-weight:700;font-size:.875rem;opacity:0;pointer-events:none;transition:all .2s}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15a1 1 0 0 0 1.5.9l12.5-7.5a1 1 0 0 0 0-1.8L8.5 3.6A1 1 0 0 0 7 4.5z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-sort" viewBox="0 0 24 24"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="index.html"><span class="brand-mark"><svg class="ic ic-fill" style="width:1rem;height:1rem"><use href="#i-play"/></svg></span>Vidlo</a>
+    <div class="top-r">
+      <button class="icon-btn" id="modeBtn" aria-label="Cambiar tema"><svg class="ic" id="icSun"><use href="#i-sun"/></svg><svg class="ic" id="icMoon" style="display:none"><use href="#i-moon"/></svg></button>
+      <a class="icon-btn" href="index.html" aria-label="Buscar"><svg class="ic"><use href="#i-search"/></svg></a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero-card">
+    <h1 id="chName">Cargando...</h1>
+    <p class="subtitle" id="chSub"></p>
+    <div class="meta-row" id="chMeta"></div>
+    <div class="chips" id="chTags"></div>
+    <p class="desc" id="chDesc"></p>
+
+    <button class="add-btn" id="addListBtn">
+      <span style="display:flex;align-items:center;gap:.5rem"><svg class="ic"><use href="#i-plus"/></svg>Agregar a lista</span>
+      <svg class="ic"><use href="#i-down"/></svg>
+    </button>
+
+    <div class="action-row">
+      <a class="btn-main" id="playFirstBtn" href="#"><svg class="ic ic-fill" style="width:1.2rem;height:1.2rem"><use href="#i-play"/></svg>Tráiler / Ver</a>
+      <button class="btn-sq" id="favBtn" aria-label="Favorito"><svg class="ic"><use href="#i-heart"/></svg></button>
+      <button class="btn-sq" id="shareBtn" aria-label="Compartir"><svg class="ic"><use href="#i-share"/></svg></button>
+    </div>
+
+    <div class="rating-box">
+      <svg class="ic"><use href="#i-star"/></svg>
+      <span class="rating-val" id="chRate">8.5</span>
+      <div class="rating-meta"><span>VAL RATING</span><b id="chVotes">1,204 Votos</b></div>
+    </div>
+  </section>
+
+  <h2 class="sec-title">Relacionados</h2>
+  <span class="rel-badge" id="relYear">2026</span>
+  <a class="rel-card" id="relLink" href="#">
+    <div class="rel-thumb" id="relThumb"></div>
+    <div class="rel-info">
+      <h3 id="relTitle">Contenido relacionado</h3>
+      <p id="relType">Precuela / Recomendado</p>
+    </div>
+  </a>
+
+  <div class="eps-head">
+    <h2>Episodios</h2>
+    <div class="eps-ctrls">
+      <button class="icon-btn" id="sortBtn" aria-label="Ordenar"><svg class="ic"><use href="#i-sort"/></svg></button>
+    </div>
+  </div>
+
+  <div class="eps-grid" id="epsGrid"></div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="api.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const CHANNEL = new URLSearchParams(location.search).get('ch') || '';
+
+let tt;
+const toast = msg => { const t = $('toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 2200); };
+
+const root = document.documentElement;
+$('modeBtn').onclick = () => {
+  const dark = !root.classList.contains('dark');
+  root.classList.toggle('dark', dark);
+  $('icSun').style.display = dark ? '' : 'none';
+  $('icMoon').style.display = dark ? 'none' : '';
+  try { localStorage.setItem('vidlo-mode', dark ? 'dark' : 'light'); } catch (e) {}
+};
+
+let reverseOrder = false;
+let channelVideos = [];
+
+async function init() {
+  if (!CHANNEL) { location.href = 'index.html'; return; }
+
+  let allVideos = [];
+  try {
+    allVideos = await apiVideos();
+  } catch (e) {
+    toast('Error al cargar la serie'); return;
+  }
+
+  channelVideos = allVideos.filter(v => v.ch === CHANNEL);
+  if (!channelVideos.length) {
+    $('chName').textContent = CHANNEL;
+    $('chDesc').textContent = 'No se encontraron videos para este canal.';
+    return;
+  }
+
+  const sample = channelVideos[0];
+  document.title = sample.ch + ' – Vidlo';
+
+  $('chName').textContent = sample.ch;
+  $('chSub').textContent = sample.cat ? sample.cat + ' Series' : 'Canal Oficial';
+  $('chMeta').innerHTML = `<span>Video Canal</span> • <span>${sample.year || '2026'}</span> • <span>En emisión</span>`;
+  $('chTags').innerHTML = (sample.tags || ['General']).map(t => `<span class="chip">${esc(t)}</span>`).join('');
+  $('chDesc').textContent = sample.desc || `Todos los episodios y publicaciones oficiales de ${sample.ch}.`;
+  $('chRate').textContent = sample.rating \vert{}\vert{} '8.5';$('chVotes').textContent = sample.votes ? sample.votes + ' Votos' : '856 Votos';
+
+  $('playFirstBtn').href = `watch.html?id=${channelVideos[0].id}`;
+
+  const other = allVideos.find(v => v.ch !== CHANNEL) || sample;
+  $('relYear').textContent = other.year \vert{}\vert{} '2026';$('relTitle').textContent = other.ch;
+  $('relType').textContent = other.cat ? `${other.cat} • Recomendado` : 'Contenido Relacionado';
+  $('relThumb').style.backgroundImage = vidloBg(other, 120);$('relLink').href = `channel.html?ch=${encodeURIComponent(other.ch)}`;
+
+  renderEpisodes();
+}
+
+function renderEpisodes() {
+  const list = [...channelVideos];
+  if (reverseOrder) list.reverse();
+
+  $('epsGrid').innerHTML = list.map((v, i) => `
+    <a class="ep-card" href="watch.html?id=${v.id}">
+      <div class="ep-thumb">
+        <div class="art" style="${vidloBg(v)}"></div>
+        <span class="ep-badge">Episodio ${reverseOrder ? list.length - i : i + 1}</span>
+      </div>
+      <h3>${esc(v.title)}</h3>
+    </a>`).join('');
+}
+
+$('sortBtn').onclick = () => {
+  reverseOrder = !reverseOrder;
+  renderEpisodes();
+  toast(reverseOrder ? 'Orden: Más recientes primero' : 'Orden: Primeros episodios primero');
+};
+
+$('addListBtn').onclick = () => toast('Añadido a tus listas');
+$('favBtn').onclick = () => toast('Guardado en tus favoritos');$('shareBtn').onclick = async () => {
+  try {
+    await navigator.clipboard.writeText(location.href);
+    toast('Enlace copiado al portapapeles');
+  } catch(e) {}
+};
+
+init();
+</script>
+</body>
+</html>
