@@ -14,7 +14,6 @@ const JWT_SECRET = process.env.JWT_SECRET || 'vidlo-secret-key-change-in-product
 
 class UserError extends Error {}
 
-/* ---------- Enlaces de video ---------- */
 function normSrc(link) {
   link = String(link || '').trim();
   if (!link) return [];
@@ -50,7 +49,6 @@ function normSrc(link) {
   return [{ n: 'Enlace', embed: u.href, dl: '', type: 'iframe' }];
 }
 
-/* ---------- Validación y limpieza ---------- */
 const str = (x, max) => String(x == null ? '' : x).trim().slice(0, max);
 function httpsUrl(x, label) {
   x = str(x, 500);
@@ -85,7 +83,6 @@ function clean(b) {
   };
 }
 
-/* ---------- Datos de Semilla ---------- */
 const MEGA = 'https://mega.nz/file/MnoChCpQ#S63JRkBV3kcc90w1aQnsEMjohfR6aaIHbbY-ieNnnmc';
 const SEED = [
   { title: 'Cómo editar tu primer video en 15 minutos', ch: 'Taller Creativo', dur: '12:34', cat: 'Tutorial', year: 2026, views: 1200000, days: 1, link: MEGA,
@@ -101,7 +98,6 @@ const seedToVideo = s => ({
   created: new Date(Date.now() - s.days * 864e5)
 });
 
-/* ---------- Almacenamiento PostgreSQL / Memoria ---------- */
 const toRow = v => ({
   title: v.title, ch: v.ch, dur: v.dur, cat: v.cat, year: v.year, tags: v.tags, descr: v.desc, thumb: v.thumb,
   rating: v.rating, votes: v.votes, views: v.views || 0, src: v.src, created_at: v.created || new Date()
@@ -189,7 +185,6 @@ function pgStore(url) {
     async remove(id) { return (await pool.query('DELETE FROM videos WHERE id=$1', [id])).rowCount > 0; },
     async view(id) { await pool.query('UPDATE videos SET views = views + 1 WHERE id=$1', [id]); },
 
-    /* Usuarios */
     async createUser(username, passwordHash) {
       const res = await pool.query('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id, username', [username, passwordHash]);
       return res.rows[0];
@@ -203,7 +198,6 @@ function pgStore(url) {
       return res.rows[0] || null;
     },
 
-    /* Comentarios */
     async getComments(videoId) {
       const res = await pool.query(
         `SELECT c.id, c.video_id, c.user_id, c.content, c.created_at, u.username
@@ -298,7 +292,6 @@ function memStore() {
 
 const store = DATABASE_URL ? pgStore(DATABASE_URL) : memStore();
 
-/* ---------- Autenticación de Administrador ---------- */
 const sha = s => crypto.createHash('sha256').update(String(s)).digest();
 const fails = new Map();
 function admin(req, res, next) {
@@ -315,7 +308,6 @@ function admin(req, res, next) {
   next();
 }
 
-/* ---------- Autenticación de Usuario (JWT) ---------- */
 function authUser(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -336,7 +328,6 @@ function requireAuth(req, res, next) {
   next();
 }
 
-/* ---------- App Express ---------- */
 const app = express();
 app.set('trust proxy', 1);
 app.use(express.json({ limit: '100kb' }));
@@ -347,13 +338,13 @@ const wrap = fn => (req, res, next) => fn(req, res, next).catch(next);
 const page = f => (req, res) => res.sendFile(path.join(__dirname, f));
 app.get(['/', '/index.html'], page('index.html'));
 app.get(['/watch', '/watch.html'], page('watch.html'));
+app.get(['/channel', '/channel.html'], page('channel.html'));
 app.get(['/admin', '/admin.html'], page('admin.html'));
 app.get('/api.js', page('api.js'));
 app.get('/healthz', (req, res) => res.send('ok'));
 
 app.use('/api', (req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
 
-/* API de Videos */
 app.get('/api/videos', wrap(async (req, res) => {
   const { page, limit, q, ch } = req.query;
   const list = await store.list({ page, limit, q, ch });
@@ -391,7 +382,6 @@ app.delete('/api/videos/:id', admin, wrap(async (req, res) => {
   res.status(ok ? 200 : 404).json({ ok });
 }));
 
-/* API Subida de Miniaturas (Cloudinary) */
 const upload = multer({ dest: path.join(__dirname, 'tmp_uploads') });
 app.post('/api/upload-thumbnail', admin, upload.single('image'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No se recibió ninguna imagen' });
@@ -415,7 +405,6 @@ app.post('/api/upload-thumbnail', admin, upload.single('image'), async (req, res
   }
 });
 
-/* API Usuarios */
 app.post('/api/auth/register', wrap(async (req, res) => {
   const username = str(req.body.username, 30);
   const password = String(req.body.password || '');
@@ -453,7 +442,6 @@ app.get('/api/auth/me', requireAuth, wrap(async (req, res) => {
   res.json({ user });
 }));
 
-/* API Comentarios */
 app.get('/api/videos/:id/comments', wrap(async (req, res) => {
   const videoId = parseInt(req.params.id, 10);
   const comments = await store.getComments(videoId);
