@@ -64,10 +64,10 @@ small{font-size:.78rem;font-weight:400;color:var(--subs)}
 
   <div id="panel" hidden>
     <form class="card" id="add">
-      <h2>Agregar video</h2>
+      <h2 id="formTitle">Agregar video</h2>
       <label>Enlace del video
-        <input type="url" id="link" placeholder="https://mega.nz/file/...#clave  o  https://youtu.be/..." />
-        <small>Acepta enlaces de Mega (con su clave) y de YouTube.</small>
+        <input type="url" id="link" placeholder="Mega, YouTube, .m3u8 o .mp4" />
+        <small>Acepta enlaces de Mega, YouTube, streaming .m3u8 y archivos de video directos.</small>
       </label>
       <label>Título <input id="title" maxlength="200" required /></label>
       <div class="grid2">
@@ -80,15 +80,18 @@ small{font-size:.78rem;font-weight:400;color:var(--subs)}
       </div>
       <label>Etiquetas <input id="tags" placeholder="separadas por comas" /></label>
       <label>Descripción <textarea id="desc" maxlength="2000"></textarea></label>
-      <label>Miniatura (opcional)
+      <label>Miniatura (URL u opción de subida a Cloudinary)
         <input type="url" id="thumb" placeholder="https://…/imagen.jpg" />
-        <small>Si la dejas vacía se usa un degradado de color.</small>
+        <input type="file" id="thumbFile" accept="image/*" style="margin-top:.4rem;font-size:.8rem" />
       </label>
       <div class="grid2">
         <label>Valoración (opcional) <input id="rating" maxlength="6" placeholder="8.7" /></label>
         <label>Votos (opcional) <input id="votes" maxlength="20" placeholder="1,204" /></label>
       </div>
-      <button class="btn" type="submit" id="addBtn">Publicar</button>
+      <div style="display:flex;gap:.5rem">
+        <button class="btn" type="submit" id="addBtn">Publicar</button>
+        <button class="btn ghost" type="button" id="cancelBtn" hidden>Cancelar edición</button>
+      </div>
       <p class="msg" id="addMsg" role="status"></p>
     </form>
 
@@ -107,8 +110,11 @@ const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;
 const getPw = () => { try { return sessionStorage.getItem('vidlo-admin') || ''; } catch (e) { return ''; } };
 const setPw = v => { try { v ? sessionStorage.setItem('vidlo-admin', v) : sessionStorage.removeItem('vidlo-admin'); } catch (e) {} };
 
+let editingId = null;
+let currentVideos = [];
+
 async function api(path, opts = {}) {
-  const r = await fetch(path, { ...opts, headers: { 'Content-Type': 'application/json', 'x-admin-password': getPw() } });
+  const r = await fetch(path, { ...opts, headers: { 'Content-Type': 'application/json', 'x-admin-password': getPw(), ...(opts.headers||{}) } });
   const d = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(d.error || 'Algo salió mal');
   return d;
@@ -117,17 +123,46 @@ const say = (el, text, kind) => { el.textContent = text; el.className = 'msg' + 
 
 function show(on) { $('login').hidden = on; $('panel').hidden = !on; }
 
+function resetForm() {
+  editingId = null;
+  $('add').reset();
+  $('formTitle').textContent = 'Agregar video';
+  $('addBtn').textContent = 'Publicar';
+  $('cancelBtn').hidden = true;
+  say($('addMsg'), '');
+}
+
 async function loadList() {
-  const vs = await (await fetch('/api/videos')).json();
-  $('list').innerHTML = vs.length ? vs.map(v => `
+  currentVideos = await (await fetch('/api/videos')).json();
+  $('list').innerHTML = currentVideos.length ? currentVideos.map(v => `
     <div class="row">
-      <div><b>${esc(v.title)}</b><span>${esc(v.ch)}${v.src.length ? '' : ' · sin enlace de video'}</span></div>
-      <div style="display:flex;gap:.5rem">
+      <div><b>${esc(v.title)}</b><span>${esc(v.ch)}</span></div>
+      <div style="display:flex;gap:.4rem">
         <a class="btn ghost sm" href="watch.html?id=${v.id}">Ver</a>
+        <button class="btn ghost sm edit" data-id="${v.id}">Editar</button>
         <button class="btn del sm" data-id="${v.id}" data-t="${esc(v.title)}">Borrar</button>
       </div>
     </div>`).join('') : '<p class="empty">Todavía no hay videos.</p>';
 }
+
+$('thumbFile').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  say($('addMsg'), 'Subiendo miniatura…');
+  const fd = new FormData();
+  fd.append('image', file);
+  try {
+    const r = await fetch('/api/upload-thumbnail', {
+      method: 'POST',
+      headers: { 'x-admin-password': getPw() },
+      body: fd
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'Error al subir imagen');
+    $('thumb').value = d.url;
+    say($('addMsg'), 'Miniatura subida correctamente', 'ok');
+  } catch (err) { say($('addMsg'), err.message, 'err'); }
+});
 
 $('login').addEventListener('submit', async e => {
   e.preventDefault();
@@ -138,23 +173,56 @@ $('login').addEventListener('submit', async e => {
 
 $('add').addEventListener('submit', async e => {
   e.preventDefault();
-  const btn = $('addBtn'); btn.disabled = true; say($('addMsg'), 'Publicando…');
+  const btn = $('addBtn'); btn.disabled = true; say($('addMsg'), editingId ? 'Guardando cambios…' : 'Publicando…');
   try {
     const body = {};
     ['link', 'title', 'ch', 'dur', 'cat', 'year', 'tags', 'desc', 'thumb', 'rating', 'votes'].forEach(k => body[k] = $(k).value);
-    await api('/api/videos', { method: 'POST', body: JSON.stringify(body) });
-    $('add').reset(); say($('addMsg'), 'Video publicado', 'ok'); loadList();
+    
+    if (editingId) {
+      await api('/api/videos/' + editingId, { method: 'PUT', body: JSON.stringify(body) });
+      say($('addMsg'), 'Video actualizado', 'ok');
+      resetForm();
+    } else {
+      await api('/api/videos', { method: 'POST', body: JSON.stringify(body) });
+      resetForm();
+      say($('addMsg'), 'Video publicado', 'ok');
+    }
+    loadList();
   } catch (err) { say($('addMsg'), err.message, 'err'); }
   btn.disabled = false;
 });
 
 $('list').addEventListener('click', async e => {
-  const b = e.target.closest('.del'); if (!b) return;
-  if (!confirm(`¿Borrar "${b.dataset.t}"? No se puede deshacer.`)) return;
-  try { await api('/api/videos/' + b.dataset.id, { method: 'DELETE' }); loadList(); }
+  const editBtn = e.target.closest('.edit');
+  if (editBtn) {
+    const v = currentVideos.find(x => x.id == editBtn.dataset.id);
+    if (!v) return;
+    editingId = v.id;
+    $('formTitle').textContent = 'Editar video #' + v.id;
+    $('title').value = v.title || '';
+    $('ch').value = v.ch || '';
+    $('dur').value = v.dur || '';
+    $('cat').value = v.cat || '';
+    $('year').value = v.year || '';
+    $('tags').value = (v.tags || []).join(', ');
+    $('desc').value = v.desc || '';
+    $('thumb').value = v.thumb || '';
+    $('rating').value = v.rating || '';
+    $('votes').value = v.votes || '';
+    $('link').value = (v.src && v.src[0] && v.src[0].dl) || (v.src && v.src[0] && v.src[0].embed) || '';
+    $('addBtn').textContent = 'Guardar cambios';
+    $('cancelBtn').hidden = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  const delBtn = e.target.closest('.del'); if (!delBtn) return;
+  if (!confirm(`¿Borrar "${delBtn.dataset.t}"? No se puede deshacer.`)) return;
+  try { await api('/api/videos/' + delBtn.dataset.id, { method: 'DELETE' }); loadList(); }
   catch (err) { alert(err.message); }
 });
 
+$('cancelBtn').onclick = resetForm;
 $('logout').onclick = () => { setPw(''); show(false); $('pw').value = ''; };
 
 if (getPw()) api('/api/admin/check').then(() => { show(true); loadList(); }).catch(() => setPw(''));
