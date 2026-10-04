@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://api.fontshare.com" />
 <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
 <style>
-/* ============ Tokens ============ */
 :root{
   --body:#0c0c11;
   --soft:#15151c;
@@ -40,7 +39,6 @@ img,svg{display:block}
 .ic{width:1.25rem;height:1.25rem;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .ic-fill{fill:currentColor;stroke:none}
 
-/* ============ Botones ============ */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-weight:700;border-radius:var(--radius);
   transition:background .15s,border-color .15s,color .15s,opacity .15s;white-space:nowrap}
 .btn-sm{min-height:2.5rem;padding:0 1rem;font-size:.875rem}
@@ -56,7 +54,6 @@ img,svg{display:block}
 .btn-lead:hover{opacity:.85}
 .pill{border-radius:999px}
 
-/* ============ Header ============ */
 header.top{position:sticky;top:0;z-index:40;background:var(--body)}
 .top-in{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding-block:1rem;position:relative;
   background:radial-gradient(closest-side,color-mix(in srgb,var(--main) 14%,transparent),transparent)}
@@ -93,7 +90,6 @@ header.top{position:sticky;top:0;z-index:40;background:var(--body)}
   .left{flex:none}
 }
 
-/* ============ Hero ============ */
 .hero{position:relative;overflow:hidden;color:var(--subs)}
 .hero-dark{background:#0c0c11;--body:#0c0c11;--soft:#15151c;--line:#262631;--lead:#fff;--subs:#a9a9ba}
 .hero-track{display:flex;transition:transform .55s cubic-bezier(.65,0,.35,1)}
@@ -121,7 +117,6 @@ header.top{position:sticky;top:0;z-index:40;background:var(--body)}
 @media (min-width:640px){ .hero-ctrl .container{display:flex} }
 @media (min-width:1024px){ .slide h1{font-size:3rem} .slide{min-height:30rem} }
 
-/* ============ Layout principal ============ */
 .page{display:grid;gap:1.5rem;padding-block:2rem 3rem}
 @media (min-width:1280px){
   .page{grid-template-columns:repeat(12,minmax(0,1fr))}
@@ -135,7 +130,6 @@ main{display:grid;gap:1.5rem;align-items:start;min-width:0}
 .sec h2,.aside-box h2{color:var(--lead);font-size:1.5rem;font-weight:700;letter-spacing:-.01em}
 .kicker{font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--subs)}
 
-/* ============ Cuadrículas ============ */
 .grid-v{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
 @media (min-width:768px){ .grid-v{grid-template-columns:repeat(3,1fr)} }
 @media (min-width:1280px){ .grid-v{grid-template-columns:repeat(4,1fr);gap:1.5rem} }
@@ -143,7 +137,6 @@ main{display:grid;gap:1.5rem;align-items:start;min-width:0}
 @media (min-width:640px){ .grid-p{grid-template-columns:repeat(3,1fr)} }
 @media (min-width:1280px){ .grid-p{grid-template-columns:repeat(5,1fr);gap:1.5rem} }
 
-/* ============ Tarjeta de video ============ */
 .card{position:relative;color:var(--lead)}
 .thumb-wrap{position:relative}
 .thumb{position:relative;border-radius:.5rem;overflow:hidden;background:#000}
@@ -173,7 +166,6 @@ main{display:grid;gap:1.5rem;align-items:start;min-width:0}
 
 .poster .art{aspect-ratio:2/3;width:100%;border-radius:.5rem}
 
-/* ============ Aside ============ */
 .aside-box{display:grid;gap:1rem;align-content:start;background:var(--soft);border:1px solid var(--line);border-radius:.75rem;padding:1.25rem}
 .rank{display:grid;gap:.75rem;list-style:none}
 .rank li{position:relative;display:grid;grid-template-columns:2rem 5.5rem 1fr;gap:.75rem;align-items:center}
@@ -321,7 +313,7 @@ function renderGrid(list) {
         ${v.dur ? `<div class="tab"><div class="chip"><b>${esc(v.dur)}</b></div></div>` : ''}
         <span class="play"><svg class="ic ic-fill" style="width:1.25rem;height:1.25rem"><use href="#i-play"/></svg></span>
       </div>
-      <header class="card-info"><div class="ch">${esc(v.ch)}</div><h3>${esc(v.title)}</h3></header>
+      <header class="card-info"><div class="ch"><a href="channel.html?ch=${encodeURIComponent(v.ch)}">${esc(v.ch)}</a></div><h3>${esc(v.title)}</h3></header>
       <a class="cover" href="watch.html?id=${v.id}"><span class="sr-only">Ver ${esc(v.title)}</span></a>
     </article>`).join('')
     : empty(q || chSel ? 'No encontramos videos con ese criterio.' : 'Aún no hay videos. Agrega el primero desde <a href="admin.html" style="text-decoration:underline">el panel</a>.');
@@ -339,14 +331,13 @@ function renderChannels(all) {
         <div class="tab"><div class="chip">${c.n} ${c.n === 1 ? 'video' : 'videos'}</div></div>
       </div>
       <header class="card-info"><h3>${esc(name)}</h3></header>
-      <a class="cover" href="index.html?ch=${encodeURIComponent(name)}"><span class="sr-only">Ver videos de ${esc(name)}</span></a>
+      <a class="cover" href="channel.html?ch=${encodeURIComponent(name)}"><span class="sr-only">Ver canal de ${esc(name)}</span></a>
     </article>`).join('');
 }
 
 function renderRank(all) {
   const top = [...all].sort((a, b) => b.views - a.views).slice(0, 5);
-  if (!top.length) { $('rank').closest('.aside-box').style.display = 'none'; return; }
-  $('rank').innerHTML = top.map((v, i) => `
+  if (!top.length) { $('rank').closest('.aside-box').style.display = 'none'; return; }$('rank').innerHTML = top.map((v, i) => `
     <li><span class="n">${i + 1}</span><div class="art" style="${vidloBg(v)}"></div>
       <div><h3>${esc(v.title)}</h3><small>${fmtViews(v.views)} vistas</small></div>
       <a href="watch.html?id=${v.id}"><span class="sr-only">${esc(v.title)}</span></a></li>`).join('');
@@ -369,12 +360,11 @@ function startCarousel() {
   let cur = 0, timer;
   const go = n => { cur = (n + slides) % slides; track.style.transform = `translateX(-${cur * 100}%)`; };
   const auto = () => { clearInterval(timer); timer = setInterval(() => go(cur + 1), 7000); };
-  $('prev').onclick = () => { go(cur - 1); auto(); };
-  $('next').onclick = () => { go(cur + 1); auto(); };
+  $('prev').onclick = () => { go(cur - 1); auto(); };$('next').onclick = () => { go(cur + 1); auto(); };
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) auto();
 }
 
-const root = document.documentElement, sun = $('icSun'), moon = $('icMoon');
+const root = document.documentElement, sun = $('icSun'), moon =$('icMoon');
 const applyMode = dark => { root.classList.toggle('dark', dark); sun.style.display = dark ? '' : 'none'; moon.style.display = dark ? 'none' : ''; };
 let saved = null; try { saved = localStorage.getItem('vidlo-mode'); } catch (e) {}
 applyMode(saved ? saved === 'dark' : true);
@@ -383,9 +373,9 @@ $('modeBtn').onclick = () => {
   try { localStorage.setItem('vidlo-mode', d ? 'dark' : 'light'); } catch (e) {}
 };
 
-const mm = $('mobileMenu'), mb = $('menuBtn');
+const mm = $('mobileMenu'), mb =$('menuBtn');
 mb.onclick = () => { const o = mm.classList.toggle('open'); mb.setAttribute('aria-expanded', o); };
-const bs = $('box-search'), sb = $('searchBtn'), icS = $('icS');
+const bs = $('box-search'), sb = $('searchBtn'), icS =$('icS');
 sb.onclick = () => { const o = bs.classList.toggle('show'); icS.firstElementChild.setAttribute('href', o ? '#i-x' : '#i-search'); if (o) bs.querySelector('input').focus(); };
 if (q) { const inp = bs.querySelector('input'); if (inp) inp.value = q; }
 </script>
