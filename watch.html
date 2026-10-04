@@ -9,18 +9,35 @@
 <link rel="preconnect" href="https://api.fontshare.com" />
 <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
 <style>
+/* ============ Tokens ============ */
 :root{
-  --body:#0b0b10;--card:#10111a;--line:#21232f;--slate:#23263a;--slate2:#191b29;
-  --lead:#ededf2;--subs:#8d90a3;--main:#2bb8a0;--on-main:#ffffff;--gold:#e3b53c;--indigo:#7480ff;
-  --tabbar:#11121a;--radius:.75rem;
+  --body:#0b0b10;
+  --card:#10111a;
+  --line:#21232f;
+  --slate:#23263a;      /* botones rellenos */
+  --slate2:#191b29;     /* casillas numeradas */
+  --lead:#ededf2;
+  --subs:#8d90a3;
+  --main:#2bb8a0;       /* acento verde azulado */
+  --on-main:#ffffff;
+  --gold:#e3b53c;
+  --indigo:#7480ff;
+  --tabbar:#11121a;
+  --radius:.75rem;
+  --danger:#ff6b6b;
 }
 html:not(.dark){
-  --body:#f4f5f9;--card:#ffffff;--line:#e1e4ec;--slate:#e4e7f1;--slate2:#eceef5;
-  --lead:#14151c;--subs:#5f6377;--main:#13a58c;--gold:#d19a12;--indigo:#4c58e6;--tabbar:#ffffff;
+  --body:#f4f5f9; --card:#ffffff; --line:#e1e4ec; --slate:#e4e7f1; --slate2:#eceef5;
+  --lead:#14151c; --subs:#5f6377; --main:#13a58c; --gold:#d19a12; --indigo:#4c58e6; --tabbar:#ffffff; --danger:#d63b3b;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{color-scheme:dark}html:not(.dark){color-scheme:light}
-body{font-family:"Satoshi",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--body);color:var(--subs);line-height:1.5;min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:5.5rem}
+html{color-scheme:dark}
+html:not(.dark){color-scheme:light}
+body{
+  font-family:"Satoshi",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  background:var(--body);color:var(--subs);line-height:1.5;min-height:100vh;
+  -webkit-font-smoothing:antialiased;padding-bottom:5.5rem;
+}
 a{color:inherit;text-decoration:none}
 button,select,input,textarea{font:inherit;color:inherit}
 button{background:none;border:0;cursor:pointer}
@@ -31,73 +48,191 @@ img,svg{display:block}
 .ic-fill{fill:currentColor;stroke:none}
 [hidden]{display:none!important}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.6rem;padding:0 1rem;border-radius:var(--radius);font-weight:500;font-size:.9rem;white-space:nowrap;transition:background .15s,border-color .15s,color .15s,opacity .15s}
+/* ============ Botones ============ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.6rem;padding:0 1rem;
+  border-radius:var(--radius);font-weight:500;font-size:.9rem;white-space:nowrap;transition:background .15s,border-color .15s,color .15s,opacity .15s}
 .btn.sq{width:2.75rem;padding:0}
 .btn.line{border:1px solid var(--line);color:var(--lead)}
+.btn.line:hover{border-color:var(--subs)}
 .btn.slate{background:var(--slate);color:var(--lead)}
+.btn.slate:hover{filter:brightness(1.15)}
 .btn.sm{min-height:2.2rem;padding:0 .8rem;font-size:.85rem}
+.btn[aria-disabled="true"]{opacity:.4;pointer-events:none}
+.btn[aria-pressed="true"]{background:color-mix(in srgb,var(--main) 25%,var(--slate));color:var(--main)}
 .grow{flex:1}
 
+/* ============ Header ============ */
 header.top{position:sticky;top:0;z-index:40;background:var(--body)}
 .top-in{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-block:1.1rem}
 .brand{display:flex;align-items:center;gap:.5rem;color:var(--lead);font-weight:700;font-size:1.375rem;letter-spacing:-.02em}
 .brand-mark{width:2rem;height:2rem;border-radius:.5rem;background:#7c5cff;display:grid;place-items:center;color:#fff}
+.top-r{display:flex;align-items:center;gap:.5rem}
+.community{width:2.75rem;height:2.75rem;display:grid;place-items:center;color:var(--indigo)}
+.community .ic{width:1.6rem;height:1.6rem}
+.dnav{display:none;margin-right:.75rem}
+.dnav a{padding:.5rem .85rem;border-radius:.5rem;font-weight:500;font-size:.9rem}
+.dnav a:hover{background:var(--card);color:var(--lead)}
+.sbar{border-top:1px solid var(--line);background:var(--body);padding-block:.75rem}
+.sbar input{width:100%;min-height:2.6rem;border:1px solid var(--line);background:var(--card);border-radius:var(--radius);padding:0 1rem;color:var(--lead)}
+.sbar input::placeholder{color:var(--subs)}
+html:not(.dark) #icMoon{display:block}
+#icMoon{display:none}
+html:not(.dark) #icSun{display:none}
 
-.layout{display:grid;gap:1.4rem;padding-block:.5rem 2rem;grid-template-areas:"stage" "ctrl" "serv" "eps" "info" "comments"}
+/* ============ Layout ============ */
+.layout{display:grid;gap:1.4rem;padding-block:.5rem 2rem;
+  grid-template-areas:"stage" "ctrl" "serv" "eps" "info" "comments"}
 .layout>*{min-width:0}
-#stage{grid-area:stage}#ctrl{grid-area:ctrl}#serv{grid-area:serv}#eps{grid-area:eps}#info{grid-area:info}#comments{grid-area:comments}
+#stage{grid-area:stage}
+#ctrl{grid-area:ctrl}
+#serv{grid-area:serv}
+#eps{grid-area:eps}
+#info{grid-area:info}
+#comments{grid-area:comments}
 @media (min-width:1024px){
   body{padding-bottom:0}
   .layout{grid-template-columns:minmax(0,1fr) 22rem;column-gap:2rem;padding-block:1rem 3rem;
     grid-template-areas:"stage eps" "ctrl eps" "serv eps" "info eps" "comments eps";grid-template-rows:auto auto auto auto 1fr}
   #eps{align-self:start;position:sticky;top:5.5rem}
+  .dnav{display:flex}
 }
 
-.stage{position:relative;overflow:hidden;border-radius:var(--radius);background:#000;aspect-ratio:16/9}
+/* ============ Reproductor ============ */
+.stage{position:relative;overflow:hidden;border-radius:var(--radius);background:#000;aspect-ratio:21/16}
+@media (min-width:640px){ .stage{aspect-ratio:16/9} }
 .stage iframe,.stage video{position:absolute;inset:0;width:100%;height:100%;border:0}
 .stage .poster{position:absolute;inset:0;background-size:cover;background-position:center}
-.bigplay{position:absolute;inset:0;margin:auto;width:3.75rem;height:3.75rem;border-radius:50%;display:grid;place-items:center;border:4px solid rgba(255,255,255,.8);background:rgba(0,0,0,.25);color:rgba(255,255,255,.92);padding-left:3px}
-.nosrc{position:absolute;inset:0;display:grid;place-content:center;text-align:center;padding:1.5rem;color:#d4d6e2;font-weight:500;background:rgba(0,0,0,.45)}
+.stage img.poster{object-fit:cover;width:100%;height:100%}
+.bigplay{position:absolute;inset:0;margin:auto;width:3.75rem;height:3.75rem;border-radius:50%;display:grid;place-items:center;
+  border:4px solid rgba(255,255,255,.8);background:rgba(0,0,0,.25);color:rgba(255,255,255,.92);padding-left:3px;
+  transition:transform .15s,background .15s}
+.bigplay:hover{transform:scale(1.06);background:rgba(0,0,0,.4)}
+.bigplay .ic{width:1.6rem;height:1.6rem}
+.nosrc{position:absolute;inset:0;display:grid;place-content:center;text-align:center;padding:1.5rem;color:#d4d6e2;font-weight:500;
+  background:rgba(0,0,0,.45)}
 
+/* ============ Controles ============ */
 .ctrl{display:flex;gap:.6rem}
+
+/* ============ Servidores ============ */
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius)}
-.serv{display:flex;gap:.9rem;align-items:flex-start;padding:1.1rem}
+.serv{display:flex;gap:.9rem;align-items:flex-start;padding:1.1rem 1.1rem}
 .serv-l{display:flex;align-items:center;gap:.6rem;min-height:2.6rem;color:var(--subs);font-weight:500;font-size:.95rem}
+.serv-l .ic{color:var(--main);width:1.5rem;height:1.5rem}
 .pills{display:flex;flex-wrap:wrap;gap:.5rem}
 .pill{min-height:2.6rem;padding:0 1rem;border-radius:.625rem;background:var(--slate);color:var(--subs);font-weight:500;font-size:.9rem}
+.pill:hover{color:var(--lead)}
 .pill.on{background:var(--main);color:var(--on-main)}
+.serv-empty{min-height:2.6rem;display:flex;align-items:center;font-size:.9rem}
 
+/* ============ Lista numerada ============ */
 .eps{padding:1.25rem 1.1rem}
+.eps-k{font-size:.9rem;color:var(--subs)}
 .eps-t{font-size:1.2rem;font-weight:700;color:var(--lead);margin:.15rem 0 1rem}
-.nums{display:grid;grid-template-columns:repeat(6,1fr);gap:.55rem;max-height:20rem;overflow-y:auto}
-.num{display:grid;place-items:center;min-height:2.6rem;border-radius:.625rem;background:var(--slate2);color:var(--subs);font-weight:500;font-size:.9rem}
+.eps-tools{display:flex;gap:.6rem;margin-bottom:.9rem}
+.select{position:relative;flex:1;min-width:0}
+.select select{appearance:none;-webkit-appearance:none;width:100%;min-height:2.75rem;padding:0 2.5rem 0 1rem;
+  background:transparent;border:1px solid var(--line);border-radius:var(--radius);color:var(--lead);font-size:.95rem;cursor:pointer}
+.select select option{background:var(--card);color:var(--lead)}
+.select .ic{position:absolute;right:.9rem;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--subs)}
+.find{width:100%;min-height:2.6rem;margin-bottom:.9rem;padding:0 1rem;border:1px solid var(--line);background:var(--body);border-radius:var(--radius);color:var(--lead)}
+.nums{display:grid;grid-template-columns:repeat(6,1fr);gap:.55rem;max-height:20rem;overflow-y:auto;padding-right:.15rem}
+.num{display:grid;place-items:center;min-height:2.6rem;border-radius:.625rem;background:var(--slate2);color:var(--subs);font-weight:500;font-size:.9rem;
+  transition:background .15s,color .15s}
+.num:hover{color:var(--lead);background:var(--slate)}
 .num.cur{background:var(--main);color:var(--on-main)}
+@media (min-width:1024px){ .nums{grid-template-columns:repeat(5,1fr)} }
 
+/* ============ Información ============ */
 .info{display:grid;gap:.9rem;justify-items:start}
 .series{color:var(--main);font-size:1.15rem;font-weight:700}
-.info h1{color:var(--lead);font-size:1.75rem;line-weight:1.15;font-weight:700}
+.series:hover{text-decoration:underline}
+.info h1{color:var(--lead);font-size:1.75rem;line-height:1.15;font-weight:700;letter-spacing:-.01em}
+@media (min-width:1024px){ .info h1{font-size:2.25rem} }
 .meta{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .6rem;font-size:.95rem}
+.tags{display:flex;flex-wrap:wrap;gap:.5rem}
+.tag{display:inline-flex;align-items:center;min-height:2.4rem;padding:0 1.2rem;border:1px solid var(--line);border-radius:999px;font-size:.9rem;font-weight:500;color:var(--subs)}
+.tag:hover{color:var(--lead);border-color:var(--subs)}
+.desc{color:var(--lead);opacity:.9;font-size:.95rem;line-height:1.7;max-width:46rem;cursor:pointer;
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.desc.open{display:block;-webkit-line-clamp:unset}
+.row-end{display:flex;flex-wrap:wrap;gap:.75rem;align-items:stretch;margin-top:.4rem}
+.rating{display:flex;align-items:center;gap:.8rem;padding:.7rem 1.1rem;border:1px solid var(--line);background:var(--card);border-radius:var(--radius)}
+.rating .ic{width:1.9rem;height:1.9rem;color:var(--gold)}
+.rating b{font-size:2rem;line-height:1;font-weight:700;color:var(--lead)}
+.rating small{display:block;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--subs)}
+.rating span{font-size:.9rem;font-weight:700;color:var(--subs)}
+.sqb{width:3.3rem;display:grid;place-items:center;border:1px solid var(--line);border-radius:var(--radius);color:var(--subs)}
+.sqb:hover{color:var(--lead);border-color:var(--subs)}
 
-.c-item{display:grid;gap:.25rem;padding:.75rem;border:1px solid var(--line);border-radius:.5rem;background:var(--body)}
-.c-head{display:flex;justify-content:space-between;font-size:.8rem;color:var(--subs)}
-.c-head b{color:var(--lead)}
+/* ============ Comentarios ============ */
+.comments{display:grid;gap:1.25rem;padding:1.25rem}
+.comments h2{font-size:1.25rem;color:var(--lead);font-weight:700}
+.c-item{display:grid;gap:.3rem;padding:.85rem;border:1px solid var(--line);border-radius:var(--radius);background:var(--body)}
+.c-head{display:flex;justify-content:space-between;align-items:center;font-size:.8rem;color:var(--subs)}
+.c-head b{color:var(--lead);font-size:.9rem}
+.c-body{color:var(--lead);font-size:.925rem;line-height:1.5}
+.c-del{color:var(--danger);font-size:.8rem;font-weight:500;margin-top:.2rem;justify-self:start;background:none;border:0;cursor:pointer}
 
-.toast{position:fixed;left:50%;bottom:6.5rem;transform:translate(-50%,1rem);z-index:60;background:var(--lead);color:var(--body);padding:.7rem 1.1rem;border-radius:.625rem;font-weight:700;font-size:.875rem;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+/* ============ Barra inferior (móvil) ============ */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:grid;grid-template-columns:repeat(5,1fr);
+  background:var(--tabbar);border-top:1px solid var(--line);padding:.6rem .25rem calc(.6rem + env(safe-area-inset-bottom))}
+.tabbar a{display:grid;justify-items:center;gap:.2rem;font-size:.72rem;font-weight:500;color:var(--subs);padding:.15rem 0}
+.tabbar a:hover,.tabbar a.on{color:var(--lead)}
+.tabbar .ic{width:1.75rem;height:1.75rem;stroke-width:1.6}
+@media (min-width:1024px){ .tabbar{display:none} }
+
+/* ============ Modal y Avisos ============ */
+.modal-bg{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.8);display:grid;place-items:center;padding:1rem}
+.modal-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem;width:100%;max-width:24rem;display:grid;gap:1rem;position:relative}
+.toast{position:fixed;left:50%;bottom:6.5rem;transform:translate(-50%,1rem);z-index:60;background:var(--lead);color:var(--body);
+  padding:.7rem 1.1rem;border-radius:.625rem;font-weight:700;font-size:.875rem;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:90vw;text-align:center}
 .toast.on{opacity:1;transform:translate(-50%,0)}
+@media (min-width:1024px){ .toast{bottom:2rem} }
 </style>
 </head>
 <body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
   <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
   <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 10h6M7 14h10"/></symbol>
+  <symbol id="i-sort" viewBox="0 0 24 24"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15a1 1 0 0 0 1.5.9l12.5-7.5a1 1 0 0 0 0-1.8L8.5 3.6A1 1 0 0 0 7 4.5z" fill="currentColor" stroke="none"/></symbol>
-  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 22V4M4 4h13l-2 4 2 4H4"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11.5V20a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8.5M2.5 12 12 3l9.5 9"/><path d="M9 15.5c.8 1 1.8 1.5 3 1.5s2.2-.5 3-1.5"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 2 10 5.5-10 5.5L2 7.5z"/><path d="m2 12.5 10 5.5 10-5.5M2 17.5 12 23l10-5.5"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h12M9 12h12M9 18h12"/><circle cx="4.5" cy="6" r="1" fill="currentColor"/><circle cx="4.5" cy="12" r="1" fill="currentColor"/><circle cx="4.5" cy="18" r="1" fill="currentColor"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></symbol>
 </svg>
 
 <header class="top">
   <div class="wrap top-in">
     <a class="brand" href="index.html"><span class="brand-mark"><svg class="ic ic-fill" style="width:1rem;height:1rem"><use href="#i-play"/></svg></span>Vidlo</a>
+    <div class="top-r">
+      <nav class="dnav" aria-label="Principal">
+        <a href="index.html">Inicio</a><a href="#">Explorar</a><a href="#">Novedades</a><a href="admin.html">Panel Admin</a>
+      </nav>
+      <a class="community" href="#" aria-label="Comunidad"><svg class="ic"><use href="#i-users"/></svg></a>
+      <button class="btn line sq" id="modeBtn" aria-label="Claro / oscuro">
+        <svg class="ic" id="icSun"><use href="#i-sun"/></svg><svg class="ic" id="icMoon"><use href="#i-moon"/></svg>
+      </button>
+      <button class="btn slate sq" id="searchBtn" aria-label="Buscar" aria-expanded="false"><svg class="ic" id="icS"><use href="#i-search"/></svg></button>
+    </div>
+  </div>
+  <div class="sbar" id="sbar" hidden>
+    <form class="wrap" action="index.html" method="get"><input type="search" name="q" placeholder="Buscar videos..." aria-label="Buscar" /></form>
   </div>
 </header>
 
@@ -105,14 +240,23 @@ header.top{position:sticky;top:0;z-index:40;background:var(--body)}
   <div class="stage" id="stage"></div>
 
   <div class="ctrl" id="ctrl">
-    <a class="btn line grow" id="prev" href="#">Anterior</a>
-    <a class="btn line grow" id="next" href="#">Siguiente</a>
+    <a class="btn line grow" id="prev" href="#"><svg class="ic"><use href="#i-left"/></svg>Anterior</a>
+    <a class="btn line grow" id="next" href="#">Siguiente<svg class="ic"><use href="#i-right"/></svg></a>
+    <button class="btn slate sq" id="seen" aria-pressed="false" aria-label="Marcar como visto"><svg class="ic"><use href="#i-eye"/></svg></button>
+    <a class="btn slate sq" id="dl" href="#" target="_blank" rel="noopener" aria-label="Descargar"><svg class="ic"><use href="#i-download"/></svg></a>
   </div>
 
   <div class="card serv" id="serv"></div>
 
-  <section class="card eps" id="eps">
-    <h2 class="eps-t" id="epsTitle">Videos</h2>
+  <section class="card eps" id="eps" aria-label="Lista de videos">
+    <p class="eps-k">Estás viendo</p>
+    <h2 class="eps-t" id="epsTitle"></h2>
+    <div class="eps-tools">
+      <div class="select"><select id="range" aria-label="Rango"></select><svg class="ic"><use href="#i-down"/></svg></div>
+      <button class="btn slate sq" id="epsSearch" aria-label="Ir a un número"><svg class="ic"><use href="#i-search"/></svg></button>
+      <button class="btn slate sq" id="epsSort" aria-label="Invertir orden" aria-pressed="false"><svg class="ic"><use href="#i-sort"/></svg></button>
+    </div>
+    <input class="find" id="find" type="number" inputmode="numeric" min="1" placeholder="Ir al número y presionar Enter" hidden />
     <div class="nums" id="nums"></div>
   </section>
 
@@ -120,33 +264,50 @@ header.top{position:sticky;top:0;z-index:40;background:var(--body)}
     <a class="series" id="ch" href="#"></a>
     <h1 id="title"></h1>
     <div class="meta" id="meta"></div>
-    <p class="desc" id="desc"></p>
+    <div class="tags" id="tags"></div>
+    <p class="desc" id="desc" role="button" tabindex="0" aria-expanded="false"></p>
+    <div class="row-end">
+      <div class="rating">
+        <svg class="ic"><use href="#i-star"/></svg>
+        <b id="rate"></b>
+        <div><small>Valoración</small><span id="votes"></span></div>
+      </div>
+      <button class="sqb" id="share" aria-label="Compartir"><svg class="ic"><use href="#i-share"/></svg></button>
+      <button class="sqb" id="flag" aria-label="Reportar"><svg class="ic"><use href="#i-flag"/></svg></button>
+    </div>
   </section>
 
-  <section class="card" id="comments" style="padding:1.25rem">
-    <h2 style="color:var(--lead);font-size:1.2rem;margin-bottom:1rem">Comentarios</h2>
-    <div id="authBox" style="margin-bottom:1rem"></div>
-    <form id="commentForm" style="display:grid;gap:.5rem;margin-bottom:1.5rem" hidden>
-      <textarea id="commentText" placeholder="Escribe un comentario..." required style="width:100%;min-height:4.5rem;padding:.75rem;background:var(--body);border:1px solid var(--line);border-radius:var(--radius);color:var(--lead)"></textarea>
-      <button class="btn slate sm" type="submit" style="justify-self:end">Publicar comentario</button>
+  <section class="card comments" id="comments">
+    <h2>Comentarios</h2>
+    <div id="authBox"></div>
+    <form id="commentForm" hidden style="display:grid;gap:.6rem">
+      <textarea id="commentText" placeholder="Escribe un comentario..." required></textarea>
+      <button class="btn slate sm" type="submit" style="justify-self:end">Publicar</button>
     </form>
     <div id="commentsList" style="display:grid;gap:.75rem"></div>
   </section>
 </div>
 
-<!-- Modal Autenticación -->
-<div id="authModal" style="position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:grid;place-items:center;padding:1rem" hidden>
-  <div class="card" style="width:100%;max-width:22rem;padding:1.5rem;position:relative">
+<nav class="tabbar" aria-label="Navegación">
+  <a href="index.html"><svg class="ic"><use href="#i-home"/></svg>Inicio</a>
+  <a href="#"><svg class="ic"><use href="#i-layers"/></svg>Explorar</a>
+  <a href="#"><svg class="ic"><use href="#i-calendar"/></svg>Novedades</a>
+  <a href="#"><svg class="ic"><use href="#i-list"/></svg>Mis listas</a>
+  <a href="admin.html"><svg class="ic"><use href="#i-user"/></svg>Admin</a>
+</nav>
+
+<div id="authModal" class="modal-bg" hidden>
+  <div class="modal-card">
     <button id="closeAuth" style="position:absolute;top:.75rem;right:.75rem;color:var(--subs)"><svg class="ic"><use href="#i-x"/></svg></button>
-    <h2 id="authTitle" style="color:var(--lead);font-size:1.25rem;margin-bottom:1rem">Iniciar sesión</h2>
-    <form id="authForm" style="display:grid;gap:.8rem">
+    <h2 id="authTitle" style="color:var(--lead);font-size:1.2rem">Iniciar sesión</h2>
+    <form id="authForm" style="display:grid;gap:.8rem;margin-top:.5rem">
       <label style="display:grid;gap:.3rem;font-size:.85rem;color:var(--subs)">Usuario
         <input type="text" id="authUser" required style="padding:.6rem;background:var(--body);border:1px solid var(--line);border-radius:.5rem;color:var(--lead)" />
       </label>
       <label style="display:grid;gap:.3rem;font-size:.85rem;color:var(--subs)">Contraseña
         <input type="password" id="authPw" required style="padding:.6rem;background:var(--body);border:1px solid var(--line);border-radius:.5rem;color:var(--lead)" />
       </label>
-      <button class="btn slate" type="submit" id="authSubmit" style="margin-top:.5rem">Entrar</button>
+      <button class="btn slate" type="submit" id="authSubmit" style="margin-top:.4rem">Entrar</button>
       <p id="authMsg" style="font-size:.85rem;color:var(--main)"></p>
     </form>
     <p style="margin-top:1rem;font-size:.85rem;text-align:center">
@@ -155,7 +316,7 @@ header.top{position:sticky;top:0;z-index:40;background:var(--body)}
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="api.js"></script>
 <script>
@@ -164,6 +325,18 @@ const VIDEO_ID = parseInt(new URLSearchParams(location.search).get('id'), 10);
 
 let tt;
 const toast = msg => { const t = $('toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 2200); };
+
+$('modeBtn').onclick = () => {
+  const dark = !document.documentElement.classList.contains('dark');
+  document.documentElement.classList.toggle('dark', dark);
+  try { localStorage.setItem('vidlo-mode', dark ? 'dark' : 'light'); } catch (e) {}
+};
+$('searchBtn').onclick = e => {
+  const sb = $('sbar'); sb.hidden = !sb.hidden;
+  e.currentTarget.setAttribute('aria-expanded', !sb.hidden);
+  $('icS').firstElementChild.setAttribute('href', sb.hidden ? '#i-search' : '#i-x');
+  if (!sb.hidden) sb.querySelector('input').focus();
+};
 
 let currentUser = null;
 let authIsRegister = false;
@@ -202,14 +375,14 @@ async function loadComments() {
           <b>${esc(c.username)}</b>
           <span>${timeAgo(c.created_at)}</span>
         </div>
-        <p style="color:var(--lead);font-size:.9rem">${esc(c.content)}</p>
-        ${currentUser && currentUser.id === c.user_id ? `<button data-id="${c.id}" class="del-c" style="color:var(--danger);font-size:.75rem;justify-self:start;margin-top:.3rem">Eliminar</button>` : ''}
-      </div>`).join('') : '<p style="font-size:.85rem">Aún no hay comentarios.</p>';
+        <p class="c-body">${esc(c.content)}</p>
+        ${currentUser && currentUser.id === c.user_id ? `<button data-id="${c.id}" class="c-del">Eliminar</button>` : ''}
+      </div>`).join('') : '<p style="font-size:.85rem;color:var(--subs)">Aún no hay comentarios.</p>';
   } catch (e) {}
 }
 
 $('commentsList').addEventListener('click', async e => {
-  if (!e.target.classList.contains('del-c')) return;
+  if (!e.target.classList.contains('c-del')) return;
   const id = e.target.dataset.id;
   try {
     await apiFetch('/api/comments/' + id, { method: 'DELETE' });
@@ -265,8 +438,13 @@ $('authForm').addEventListener('submit', async e => {
   const v = VIDEOS[cur], N = VIDEOS.length;
   document.title = v.title + ' – Vidlo';
 
-  let srcIdx = 0, playing = false, hlsInstance = null;
+  try {
+    const k = 'vidlo-viewed-' + v.id;
+    if (!sessionStorage.getItem(k)) { sessionStorage.setItem(k, '1'); fetch(`/api/videos/${v.id}/view`, { method: 'POST' }); }
+  } catch (e) {}
+
   const stage = $('stage');
+  let srcIdx = 0, playing = false, hlsInstance = null;
 
   function renderStage() {
     const s = v.src[srcIdx];
@@ -276,7 +454,7 @@ $('authForm').addEventListener('submit', async e => {
       const type = s.type || (s.embed.endsWith('.m3u8') ? 'hls' : 'iframe');
 
       if (type === 'hls' || s.embed.endsWith('.m3u8')) {
-        stage.innerHTML = `<video id="vPlayer" controls autoplay style="width:100%;height:100%;background:#000"></video>`;
+        stage.innerHTML = `<video id="vPlayer" controls autoplay style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000"></video>`;
         const vp = $('vPlayer');
         if (Hls.isSupported()) {
           hlsInstance = new Hls();
@@ -285,13 +463,13 @@ $('authForm').addEventListener('submit', async e => {
         } else if (vp.canPlayType('application/vnd.apple.mpegurl')) {
           vp.src = s.embed;
         } else {
-          stage.innerHTML = `<p class="nosrc">El navegador no soporta transmisión HLS.</p>`;
+          stage.innerHTML = `<p class="nosrc">El navegador no soporta reproducción HLS.</p>`;
         }
         return;
       }
 
       if (type === 'video') {
-        stage.innerHTML = `<video src="${esc(s.embed)}" controls autoplay style="width:100%;height:100%;background:#000"></video>`;
+        stage.innerHTML = `<video src="${esc(s.embed)}" controls autoplay style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000"></video>`;
         return;
       }
 
@@ -301,29 +479,90 @@ $('authForm').addEventListener('submit', async e => {
 
     stage.innerHTML = `<div class="poster" style="${vidloBg(v, 120)}"></div>` + (s
       ? `<button class="bigplay" id="bp" aria-label="Reproducir"><svg class="ic ic-fill"><use href="#i-play"/></svg></button>`
-      : `<p class="nosrc">Sin fuente disponible.</p>`);
+      : `<p class="nosrc">Este video aún no tiene una fuente disponible.</p>`);
     if (s) $('bp').onclick = () => { playing = true; renderStage(); };
   }
 
-  $('ch').textContent = v.ch;
-  $('title').textContent = v.title;
-  $('meta').innerHTML = [v.cat, v.year, v.dur, timeAgo(v.created)].filter(Boolean).map(x => `<span>${esc(x)}</span>`).join(' • ');
-  $('desc').textContent = v.desc || '';
+  const prev = $('prev'), next =$('next');
+  const link = (el, i) => {
+    if (i >= 0 && i < N) { el.href = `watch.html?id=${VIDEOS[i].id}`; }
+    else { el.setAttribute('aria-disabled', 'true'); el.removeAttribute('href'); }
+  };
+  link(prev, cur - 1); link(next, cur + 1);
 
-  $('nums').innerHTML = VIDEOS.map((x, i) => `<a class="num${i === cur ? ' cur' : ''}" href="watch.html?id=${x.id}">${i + 1}</a>`).join('');
+  const seenBtn = $('seen');
+  const readSeen = () => { try { return JSON.parse(localStorage.getItem('vidlo-seen') || '[]'); } catch (e) { return []; } };
+  const paintSeen = () => seenBtn.setAttribute('aria-pressed', readSeen().includes(v.id));
+  paintSeen();
+  seenBtn.onclick = () => {
+    let a = readSeen(); const on = !a.includes(v.id);
+    a = on ? [...a, v.id] : a.filter(x => x !== v.id);
+    try { localStorage.setItem('vidlo-seen', JSON.stringify(a)); } catch (e) {}
+    paintSeen(); toast(on ? 'Marcado como visto' : 'Marcado como no visto');
+  };
+
+  const dl = $('dl');
+  const renderDl = () => {
+    const s = v.src[srcIdx];
+    if (s && s.dl) { dl.href = s.dl; dl.removeAttribute('aria-disabled'); }
+    else { dl.removeAttribute('href'); dl.setAttribute('aria-disabled', 'true'); }
+  };
 
   function renderServ() {
-    $('serv').innerHTML = `<div class="serv-l"><span>Fuentes</span></div>` +
+    $('serv').innerHTML = `<div class="serv-l"><svg class="ic"><use href="#i-video"/></svg><span>Video</span></div>` +
       (v.src.length
         ? `<div class="pills">${v.src.map((s, i) => `<button class="pill${i === srcIdx ? ' on' : ''}" data-i="${i}">${esc(s.n)}</button>`).join('')}</div>`
-        : `<div>Sin fuentes</div>`);
+        : `<div class="serv-empty">Sin fuentes</div>`);
   }
   $('serv').addEventListener('click', e => {
     const b = e.target.closest('.pill'); if (!b) return;
-    srcIdx = +b.dataset.i; renderServ(); renderStage();
+    srcIdx = +b.dataset.i; renderServ(); renderDl(); renderStage();
   });
 
-  renderStage(); renderServ();
+  const SIZE = 100;
+  const range = $('range'), nums =$('nums');
+  let descOrder = false;
+  $('epsTitle').textContent = 'Video ' + (cur + 1);
+  const chunks = Math.ceil(N / SIZE);
+  range.innerHTML = Array.from({ length: chunks }, (_, k) => `<option value="${k}">${k * SIZE + 1} - ${Math.min(N, (k + 1) * SIZE)}</option>`).join('');
+  range.value = Math.floor(cur / SIZE);
+  function renderNums() {
+    const k = +range.value, items = [];
+    for (let n = k * SIZE + 1; n <= Math.min(N, (k + 1) * SIZE); n++) items.push(n);
+    if (descOrder) items.reverse();
+    nums.innerHTML = items.map(n => `<a class="num${n - 1 === cur ? ' cur' : ''}" href="watch.html?id=${VIDEOS[n - 1].id}" title="${esc(VIDEOS[n - 1].title)}"${n - 1 === cur ? ' aria-current="true"' : ''}>${n}</a>`).join('');
+    const c = nums.querySelector('.cur'); if (c) c.scrollIntoView({ block: 'nearest' });
+  }
+  range.onchange = renderNums;
+  $('epsSort').onclick = e => { descOrder = !descOrder; e.currentTarget.setAttribute('aria-pressed', descOrder); renderNums(); };$('epsSearch').onclick = () => { const f = $('find'); f.hidden = !f.hidden; if (!f.hidden) f.focus(); };$('find').addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    const n = parseInt(e.target.value, 10);
+    if (n >= 1 && n <= N) location.href = `watch.html?id=${VIDEOS[n - 1].id}`; else toast(`Escribe un número entre 1 y ${N}`);
+  });
+
+  $('ch').textContent = v.ch; $('ch').href = `index.html?ch=${encodeURIComponent(v.ch)}`;
+  $('title').textContent = v.title;
+  $('meta').innerHTML = [v.cat, v.year, v.dur, timeAgo(v.created)].filter(Boolean).map(x => `<span>${esc(x)}</span>`).join('<span>•</span>');
+  $('tags').innerHTML = (v.tags || []).map(t => `<a class="tag" href="index.html?q=${encodeURIComponent(t)}">${esc(t)}</a>`).join('');
+  const d = $('desc');
+  if (v.desc) {
+    d.textContent = v.desc;
+    const toggleDesc = () => { const o = d.classList.toggle('open'); d.setAttribute('aria-expanded', o); };
+    d.onclick = toggleDesc;
+    d.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleDesc(); } });
+  } else d.hidden = true;
+  if (v.rating) { $('rate').textContent = v.rating; $('votes').textContent = v.votes ? v.votes + ' votos' : ''; }
+  else document.querySelector('.rating').hidden = true;
+
+  $('share').onclick = async () => {
+    try {
+      if (navigator.share) { await navigator.share({ title: v.title, url: location.href }); return; }
+      await navigator.clipboard.writeText(location.href); toast('Enlace copiado');
+    } catch (e) {}
+  };
+  $('flag').onclick = () => toast('Gracias, revisaremos este video');
+
+  renderStage(); renderServ(); renderDl(); renderNums();
   await checkUser();
   loadComments();
 })();
